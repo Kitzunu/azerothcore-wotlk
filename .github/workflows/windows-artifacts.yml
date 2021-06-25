@@ -1,0 +1,5 @@
+name: Windows Artifacts Build
+
+on: 
+  schedule:
+    - cron: 
