@@ -15,7 +15,6 @@ jobs:
     runs-on: windows-2019
     strategy:
       matrix:
-       backend: [boost, openssl]
        include:
           - OPTIONAL_DEFINES: ""
             TYPE: "default"
@@ -44,7 +43,7 @@ jobs:
       uses: actions/cache@v1.0.3
       with:
         path: $VCPKG_ROOT/installed
-        key: ${{ runner.os }}-vcpkg-cache-${{ matrix.db-backend }}
+        key: ${{ runner.os }}-vcpkg-cache
       env:
         VCPKG_ROOT: 'C:\vcpkg'
 
@@ -52,12 +51,12 @@ jobs:
       uses: actions/cache@v1.0.3
       with:
         path: $VCPKG_ROOT/downloads
-        key: ${{ runner.os }}-vcpkg-cache-${{ matrix.db-backend }}
+        key: ${{ runner.os }}-vcpkg-cache
       env:
         VCPKG_ROOT: 'C:\vcpkg'
 
     - name: Install dependencies
-      run: vcpkg integrate install; vcpkg install openssl:x64-windows boost:x64-windows
+      run: vcpkg install openssl:x64-windows boost:x64-windows
       env:
         VCPKG_ROOT: 'C:\vcpkg'
 
