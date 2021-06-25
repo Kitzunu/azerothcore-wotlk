@@ -62,10 +62,8 @@ jobs:
 
     - if: steps.cache-openssl.outputs.cache-hit != 'true'
       name: Install OpenSSL
-      uses: sfackler/actions/rustup@master
       id: install-openssl
-      with:
-        run: vcpkg install openssl:x64-window
+      run: cargo build --features "aes-pmac-siv openssl-vendored" 
 
     - name: Configure
       run: cmake ${{matrix.OPTIONAL_DEFINES}} -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}}
