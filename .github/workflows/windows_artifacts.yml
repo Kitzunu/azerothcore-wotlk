@@ -77,7 +77,7 @@ jobs:
         # this build step will fail
 
     - name: Configure
-      run: cmake ${{matrix.OPTIONAL_DEFINES}} -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}} -DOPENSSL_ROOT_DIR="C:/vcpkg/packages/openssl_x64-windows/share/openssl"
+      run: cmake ${{matrix.OPTIONAL_DEFINES}} -B ${{env.BUILD_DIR}} -S ${{env.REPO_DIR}} -DOPENSSL_ROOT_DIR="C:/vcpkg/packages/openssl_x64-windows"
 
     - name: Build
       env:
