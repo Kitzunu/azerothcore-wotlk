@@ -1,9 +1,6 @@
 name: Windows Artifacts Build
 
-on: 
-  schedule:
-    # Run at 22:00 UTC every day
-    - cron: '0 22 * * *'
+on: [push]
 
 env:
   BUILD_TYPE: RelWithDebInfo
