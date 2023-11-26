@@ -1,7 +1,6 @@
 name: Check pending SQL
 on:
   pull_request:
-
 jobs:
   check-pending-sql:
     runs-on: ubuntu-latest

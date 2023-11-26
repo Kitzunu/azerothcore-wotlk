@@ -780,11 +780,13 @@ Metric.Enable = 0
 
 #
 #    Metric.Interval
-#        Description: Interval between every batch of data sent in seconds
-#        Default:     10 seconds
+#        Description: Interval between every batch of data sent in seconds.
+#                     Longer interval means larger batch of data. If the batch
+#                     is too big, it might get rejected.
+#        Default:     1 second
 #
 
-Metric.Interval = 10
+Metric.Interval = 1
 
 #
 #    Metric.ConnectionInfo
@@ -3355,6 +3357,13 @@ Guild.BankTabCost4 = 25000000
 Guild.BankTabCost5 = 50000000#
 
 #
+#     Guild.MemberLimit
+#        Description: Do not allow inviting new players to the guild if the member limit is met or exceeded.
+#        Default:     0 - Disabled
+
+Guild.MemberLimit = 0
+
+#
 ###################################################################################################
 
 ###################################################################################################
@@ -4345,6 +4354,13 @@ TeleportTimeoutNear = 25
 #       Default:  45
 
 TeleportTimeoutFar = 45
+
+#
+#    DailyRBGArenaPoints.MinLevel
+#        Description: Allows gaining arena points on the first RBG win at level 70.
+#        Default: 71 - (Blizzlike)
+
+DailyRBGArenaPoints.MinLevel = 71
 
 #
 ###################################################################################################
