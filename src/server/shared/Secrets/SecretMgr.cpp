@@ -24,7 +24,7 @@
 #include "Errors.h"
 #include "Log.h"
 #include "SharedDefines.h"
-
+// Test
 #define SECRET_FLAG_FOR(key, val, server) server ## _ ## key = (val ## ull << (16*SERVER_PROCESS_ ## server))
 #define SECRET_FLAG(key, val) SECRET_FLAG_ ## key = val, SECRET_FLAG_FOR(key, val, AUTHSERVER), SECRET_FLAG_FOR(key, val, WORLDSERVER)
 enum SecretFlags : uint64
