@@ -43,6 +43,11 @@ enum UnitHook
     UNITHOOK_ON_UNIT_ENTER_COMBAT,
     UNITHOOK_ON_UNIT_DEATH,
     UNITHOOK_ON_UNIT_SET_SHAPESHIFT_FORM,
+    UNITHOOK_ON_HEALTH_CHANGE,
+    UNITHOOK_ON_MAX_HEALTH_CHANGE,
+    UNITHOOK_ON_POWER_CHANGE,
+    UNITHOOK_ON_MAX_POWER_CHANGE,
+    UNITHOOK_ON_POWER_TYPE_CHANGE,
     UNITHOOK_END
 };
 
@@ -108,6 +113,21 @@ public:
     virtual void OnUnitEnterCombat(Unit* /*unit*/, Unit* /*victim*/) { }
     virtual void OnUnitDeath(Unit* /*unit*/, Unit* /*killer*/) { }
     virtual void OnUnitSetShapeshiftForm(Unit* /*unit*/, uint8 /*form*/) { }
+
+    // Called when unit's health changes
+    virtual void OnHealthChange(Unit* /*unit*/, uint32 /*oldHealth*/, uint32 /*newHealth*/) { }
+
+    // Called when unit's max health changes
+    virtual void OnMaxHealthChange(Unit* /*unit*/, uint32 /*oldMaxHealth*/, uint32 /*newMaxHealth*/) { }
+
+    // Called when unit's power changes
+    virtual void OnPowerChange(Unit* /*unit*/, Powers /*power*/, uint32 /*oldPower*/, uint32 /*newPower*/) { }
+
+    // Called when unit's max power changes  
+    virtual void OnMaxPowerChange(Unit* /*unit*/, Powers /*power*/, uint32 /*oldMaxPower*/, uint32 /*newMaxPower*/) { }
+
+    // Called when unit's power type changes
+    virtual void OnPowerTypeChange(Unit* /*unit*/, Powers /*oldPowerType*/, Powers /*newPowerType*/) { }
 };
 
 #endif

@@ -557,6 +557,11 @@ public: /* UnitScript */
     void OnUnitEnterCombat(Unit* unit, Unit* victim);
     void OnUnitDeath(Unit* unit, Unit* killer);
     void OnUnitSetShapeshiftForm(Unit* unit, uint8 form);
+    void OnHealthChange(Unit* unit, uint32 oldHealth, uint32 newHealth);
+    void OnMaxHealthChange(Unit* unit, uint32 oldMaxHealth, uint32 newMaxHealth);
+    void OnPowerChange(Unit* unit, Powers power, uint32 oldPower, uint32 newPower);
+    void OnMaxPowerChange(Unit* unit, Powers power, uint32 oldMaxPower, uint32 newMaxPower);
+    void OnPowerTypeChange(Unit* unit, Powers oldPowerType, Powers newPowerType);
 
 public: /* MovementHandlerScript */
     void OnPlayerMove(Player* player, MovementInfo movementInfo, uint32 opcode);
