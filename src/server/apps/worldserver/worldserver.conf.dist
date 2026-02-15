@@ -447,6 +447,17 @@ Ra.Port = 3443
 Ra.MinLevel = 3
 
 #
+#    Ra.AllowedIPs
+#        Description: IP addresses allowed to connect to the remote console.
+#                     Supports wildcards using % character (e.g., 192.168.0.%)
+#                     Multiple IPs can be specified separated by commas.
+#                     Leave empty to allow all IPs.
+#        Example:     "127.0.0.1,192.168.0.%,10.0.0.42"
+#        Default:     "" - (Allow all IPs)
+
+Ra.AllowedIPs = ""
+
+#
 #    SOAP.Enable
 #        Description: Enable soap service
 #        Default:     0 - (Disabled)
@@ -467,6 +478,17 @@ SOAP.IP = "127.0.0.1"
 #        Default:     7878
 
 SOAP.Port = 7878
+
+#
+#    SOAP.AllowedIPs
+#        Description: IP addresses allowed to connect to the SOAP service.
+#                     Supports wildcards using % character (e.g., 192.168.0.%)
+#                     Multiple IPs can be specified separated by commas.
+#                     Leave empty to allow all IPs.
+#        Example:     "127.0.0.1,192.168.0.%,10.0.0.42"
+#        Default:     "" - (Allow all IPs)
+
+SOAP.AllowedIPs = ""
 
 #
 ###################################################################################################

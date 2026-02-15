@@ -20,6 +20,7 @@
 #include "Config.h"
 #include "DatabaseEnv.h"
 #include "Duration.h"
+#include "IpAddressMatcher.h"
 #include "Log.h"
 #include "MotdMgr.h"
 #include "QueryResult.h"
@@ -34,6 +35,20 @@ using boost::asio::ip::tcp;
 
 void RASession::Start()
 {
+    // Check IP allowlist
+    std::string allowedIpsConfig = sConfigMgr->GetOption<std::string>("Ra.AllowedIPs", "");
+    Acore::Net::IpAddressMatcher ipMatcher(allowedIpsConfig);
+
+    std::string clientIp = GetRemoteIpAddress();
+
+    if (!ipMatcher.Matches(clientIp))
+    {
+        LOG_WARN("commands.ra", "RA connection rejected from unauthorized IP: {}", clientIp);
+        Send("Access denied\r\n");
+        _socket.close();
+        return;
+    }
+
     // wait 1 second for active connections to send negotiation request
     for (int counter = 0; counter < 10 && _socket.available() == 0; counter++)
         std::this_thread::sleep_for(100ms);
