@@ -19,6 +19,9 @@ base_directory = glob.glob(base_pattern)
 archive_pattern = os.path.join(base_dir, 'data/sql/archive/db_*')
 archive_directory = glob.glob(archive_pattern)
 
+# Constants
+MAX_WHERE_CLAUSE_DISPLAY_LENGTH = 100
+
 # Global variables
 error_handler = False
 results = {
@@ -219,6 +222,9 @@ def excessive_deletion_check(file: io, file_path: str) -> None:
     - DELETE statements without WHERE clause
     - DELETE statements with suspicious operators (-, +, *, /) in WHERE conditions
     - DELETE statements with only broad filters (e.g., only source_type without specific IDs)
+    
+    Note: This check only processes single-line DELETE statements. Multi-line DELETE
+    statements are not currently supported.
     """
     global error_handler, results
     file.seek(0)  # Reset file pointer to the beginning
@@ -239,6 +245,7 @@ def excessive_deletion_check(file: io, file_path: str) -> None:
             continue
             
         # Check for DELETE statements
+        # Note: This regex only matches single-line DELETE statements
         delete_match = re.match(r"DELETE\s+FROM\s+`?([a-zA-Z_]+)`?(?:\s+WHERE\s+(.+?))?(?:;|$)", 
                                stripped_line, re.IGNORECASE)
         
@@ -255,9 +262,9 @@ def excessive_deletion_check(file: io, file_path: str) -> None:
                 continue
             
             # Check 2: Suspicious arithmetic operators in WHERE clause
-            # Look for patterns like "entryorguid - 123" or "id + 456" which are likely typos
+            # Look for patterns like "entryorguid - 123" or "id + @VARIABLE" which are likely typos
             # But allow them in proper contexts like "IN (@ENTRY * 100)"
-            suspicious_pattern = re.search(r'`?(\w+)`?\s*([+\-*/])\s*(\d+)', where_clause)
+            suspicious_pattern = re.search(r'`?(\w+)`?\s*([+\-*/])\s*(@?\w+)', where_clause)
             if suspicious_pattern:
                 field = suspicious_pattern.group(1)
                 operator = suspicious_pattern.group(2)
@@ -268,12 +275,17 @@ def excessive_deletion_check(file: io, file_path: str) -> None:
                 before_context = where_clause[:suspicious_pattern.start()]
                 after_context = where_clause[suspicious_pattern.end():]
                 
+                # Safely get the upper case of the context to avoid redundant operations
+                before_context_upper = before_context.upper()
+                
                 # Check if preceded by "IN" or if it's clearly part of a value expression
+                # Safely slice contexts - Python slicing handles short strings gracefully
                 in_valid_context = (
-                    ' IN ' in before_context.upper()[-20:] or
-                    'IN(' in before_context.upper()[-20:] or
-                    ',' in before_context[-5:] or
-                    '(' in before_context[-5:] and ',' in after_context[:5]
+                    ' IN ' in before_context_upper[-20:] or
+                    'IN(' in before_context_upper[-20:] or
+                    (len(before_context) >= 5 and ',' in before_context[-5:]) or
+                    (len(before_context) >= 5 and '(' in before_context[-5:] and 
+                     len(after_context) >= 5 and ',' in after_context[:5])
                 )
                 
                 if not in_valid_context:
@@ -313,7 +325,7 @@ def excessive_deletion_check(file: io, file_path: str) -> None:
                     if total_conditions <= 2:  # Only 1-2 conditions and they're broad
                         print(f"⚠️  WARNING: Potentially broad DELETE statement in {file_path} at line {line_number}")
                         print(f"   Deleting from large table `{table_name}` with only broad filters.")
-                        print(f"   WHERE clause: {where_clause[:100]}...")
+                        print(f"   WHERE clause: {where_clause[:MAX_WHERE_CLAUSE_DISPLAY_LENGTH]}...")
                         print(f"   This might delete hundreds or thousands of rows. Please verify this is intentional.")
                         check_failed = True
     
