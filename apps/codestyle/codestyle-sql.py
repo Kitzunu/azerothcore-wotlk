@@ -29,7 +29,8 @@ results = {
     "Missing semicolon check": "Passed",
     "Backtick check": "Passed",
     "Directory check": "Passed",
-    "Table engine check": "Passed"
+    "Table engine check": "Passed",
+    "Excessive deletion check": "Passed"
 }
 
 # Collect all files in all directories
@@ -77,6 +78,7 @@ def parsing_file(files: list) -> None:
                     trailing_whitespace_check(file, file_path)
                     sql_check(file, file_path)
                     insert_delete_safety_check(file, file_path)
+                    excessive_deletion_check(file, file_path)
                     semicolon_check(file, file_path)
                     backtick_check(file, file_path)
                     non_innodb_engine_check(file, file_path)
@@ -209,6 +211,116 @@ def insert_delete_safety_check(file: io, file_path: str) -> None:
     if check_failed:
         error_handler = True
         results["INSERT & DELETE safety usage check"] = "Failed"
+
+def excessive_deletion_check(file: io, file_path: str) -> None:
+    """
+    Check for potentially dangerous DELETE statements that might remove excessive rows.
+    This includes:
+    - DELETE statements without WHERE clause
+    - DELETE statements with suspicious operators (-, +, *, /) in WHERE conditions
+    - DELETE statements with only broad filters (e.g., only source_type without specific IDs)
+    """
+    global error_handler, results
+    file.seek(0)  # Reset file pointer to the beginning
+    check_failed = False
+    
+    # Common fields that are too broad to use alone in WHERE clauses
+    broad_filter_fields = ['source_type', 'type', 'class', 'race', 'gender', 'faction']
+    
+    # Tables known to have many rows (>10,000)
+    large_tables = ['smart_scripts', 'creature', 'gameobject', 'item_instance', 
+                    'creature_addon', 'game_event_creature', 'game_event_gameobject']
+    
+    for line_number, line in enumerate(file, start=1):
+        stripped_line = line.strip()
+        
+        # Skip comments
+        if stripped_line.startswith("--"):
+            continue
+            
+        # Check for DELETE statements
+        delete_match = re.match(r"DELETE\s+FROM\s+`?([a-zA-Z_]+)`?(?:\s+WHERE\s+(.+?))?(?:;|$)", 
+                               stripped_line, re.IGNORECASE)
+        
+        if delete_match:
+            table_name = delete_match.group(1)
+            where_clause = delete_match.group(2)
+            
+            # Check 1: DELETE without WHERE clause
+            if not where_clause or where_clause.strip() == "":
+                print(f"⚠️  WARNING: DELETE statement without WHERE clause found in {file_path} at line {line_number}")
+                print(f"   This will delete ALL rows from `{table_name}` table!")
+                print(f"   If this is intentional, please get approval from a maintainer.")
+                check_failed = True
+                continue
+            
+            # Check 2: Suspicious arithmetic operators in WHERE clause
+            # Look for patterns like "entryorguid - 123" or "id + 456" which are likely typos
+            # But allow them in proper contexts like "IN (@ENTRY * 100)"
+            suspicious_pattern = re.search(r'`?(\w+)`?\s*([+\-*/])\s*(\d+)', where_clause)
+            if suspicious_pattern:
+                field = suspicious_pattern.group(1)
+                operator = suspicious_pattern.group(2)
+                value = suspicious_pattern.group(3)
+                
+                # Check if this arithmetic operation is in a valid context
+                # Valid contexts: inside IN clause, part of arithmetic in values
+                before_context = where_clause[:suspicious_pattern.start()]
+                after_context = where_clause[suspicious_pattern.end():]
+                
+                # Check if preceded by "IN" or if it's clearly part of a value expression
+                in_valid_context = (
+                    ' IN ' in before_context.upper()[-20:] or
+                    'IN(' in before_context.upper()[-20:] or
+                    ',' in before_context[-5:] or
+                    '(' in before_context[-5:] and ',' in after_context[:5]
+                )
+                
+                if not in_valid_context:
+                    print(f"⚠️  WARNING: Suspicious arithmetic operator '{operator}' in WHERE clause in {file_path} at line {line_number}")
+                    print(f"   Found: '{field} {operator} {value}'")
+                    print(f"   Did you mean to use '=' instead? This could cause excessive deletions!")
+                    check_failed = True
+            
+            # Check 3: Overly broad WHERE conditions on large tables
+            if table_name in large_tables:
+                where_lower = where_clause.lower()
+                # Remove parentheses and backticks for easier matching
+                where_normalized = where_lower.replace('`', '').replace('(', ' ').replace(')', ' ')
+                
+                # Check if WHERE only contains broad filters without specific IDs
+                has_specific_filter = False
+                has_broad_filter = False
+                
+                # Look for specific filters (IDs, GUIDs, specific values) with proper operators
+                # Match patterns like "entryorguid = 123" or "id IN (1,2,3)"
+                if re.search(r'\b(entryorguid|entry|guid|id|creatureid|gameobjectid)\s*(=|IN)\s*', where_normalized):
+                    has_specific_filter = True
+                
+                # Check for broad filters
+                for broad_field in broad_filter_fields:
+                    if broad_field in where_normalized:
+                        has_broad_filter = True
+                        break
+                
+                # If only has broad filter without specific filter, warn
+                if has_broad_filter and not has_specific_filter:
+                    # Count the number of conditions in WHERE clause
+                    and_count = where_lower.count(' and ')
+                    or_count = where_lower.count(' or ')
+                    total_conditions = and_count + or_count + 1  # +1 for the first condition
+                    
+                    if total_conditions <= 2:  # Only 1-2 conditions and they're broad
+                        print(f"⚠️  WARNING: Potentially broad DELETE statement in {file_path} at line {line_number}")
+                        print(f"   Deleting from large table `{table_name}` with only broad filters.")
+                        print(f"   WHERE clause: {where_clause[:100]}...")
+                        print(f"   This might delete hundreds or thousands of rows. Please verify this is intentional.")
+                        check_failed = True
+    
+    # Handle the script error and update the result output
+    if check_failed:
+        error_handler = True
+        results["Excessive deletion check"] = "Failed"
 
 def semicolon_check(file: io, file_path: str) -> None:
     global error_handler, results

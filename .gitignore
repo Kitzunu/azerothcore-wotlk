@@ -67,6 +67,9 @@ nbproject/
 cmake-build-*/*
 coverage-report/
 .vs
+__pycache__/
+*.py[cod]
+*$py.class
 
 .vscode/*
 !.vscode/settings.json
