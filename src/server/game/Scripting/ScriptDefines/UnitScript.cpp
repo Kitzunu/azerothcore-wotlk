@@ -134,6 +134,31 @@ void ScriptMgr::OnUnitSetShapeshiftForm(Unit* unit, uint8 form)
     CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_UNIT_SET_SHAPESHIFT_FORM, script->OnUnitSetShapeshiftForm(unit, form));
 }
 
+void ScriptMgr::OnHealthChange(Unit* unit, uint32 oldHealth, uint32 newHealth)
+{
+    CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_HEALTH_CHANGE, script->OnHealthChange(unit, oldHealth, newHealth));
+}
+
+void ScriptMgr::OnMaxHealthChange(Unit* unit, uint32 oldMaxHealth, uint32 newMaxHealth)
+{
+    CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_MAX_HEALTH_CHANGE, script->OnMaxHealthChange(unit, oldMaxHealth, newMaxHealth));
+}
+
+void ScriptMgr::OnPowerChange(Unit* unit, Powers power, uint32 oldPower, uint32 newPower)
+{
+    CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_POWER_CHANGE, script->OnPowerChange(unit, power, oldPower, newPower));
+}
+
+void ScriptMgr::OnMaxPowerChange(Unit* unit, Powers power, uint32 oldMaxPower, uint32 newMaxPower)
+{
+    CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_MAX_POWER_CHANGE, script->OnMaxPowerChange(unit, power, oldMaxPower, newMaxPower));
+}
+
+void ScriptMgr::OnPowerTypeChange(Unit* unit, Powers oldPowerType, Powers newPowerType)
+{
+    CALL_ENABLED_HOOKS(UnitScript, UNITHOOK_ON_POWER_TYPE_CHANGE, script->OnPowerTypeChange(unit, oldPowerType, newPowerType));
+}
+
 UnitScript::UnitScript(const char* name, bool addToScripts, std::vector<uint16> enabledHooks)
     : ScriptObject(name, UNITHOOK_END)
 {

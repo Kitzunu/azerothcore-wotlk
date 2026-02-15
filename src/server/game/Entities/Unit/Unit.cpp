@@ -17,7 +17,6 @@
 
 #include "Unit.h"
 #include "AreaDefines.h"
-#include "ArenaSpectator.h"
 #include "Battlefield.h"
 #include "BattlefieldMgr.h"
 #include "Battleground.h"
@@ -10167,6 +10166,7 @@ bool Unit::HandleOverrideClassScriptAuraProc(Unit* victim, uint32 /*damage*/, Au
 
 void Unit::setPowerType(Powers new_powertype)
 {
+    Powers old_powertype = getPowerType();
     SetByteValue(UNIT_FIELD_BYTES_0, 3, new_powertype);
 
     if (IsPlayer())
@@ -10211,13 +10211,7 @@ void Unit::setPowerType(Powers new_powertype)
             break;
     }
 
-    if (Player const* player = ToPlayer())
-        if (player->NeedSendSpectatorData())
-        {
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "PWT", new_powertype);
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "MPW", new_powertype == POWER_RAGE || new_powertype == POWER_RUNIC_POWER ? GetMaxPower(new_powertype) / 10 : GetMaxPower(new_powertype));
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "CPW", new_powertype == POWER_RAGE || new_powertype == POWER_RUNIC_POWER ? GetPower(new_powertype) / 10 : GetPower(new_powertype));
-        }
+    sScriptMgr->OnPowerTypeChange(this, old_powertype, new_powertype);
 }
 
 FactionTemplateEntry const* Unit::GetFactionTemplateEntry() const
@@ -15736,6 +15730,7 @@ void Unit::SetHealth(uint32 val)
     }
 
     float prevHealthPct = GetHealthPct();
+    uint32 oldHealth = GetHealth();
 
     SetUInt32Value(UNIT_FIELD_HEALTH, val);
 
@@ -15745,12 +15740,12 @@ void Unit::SetHealth(uint32 val)
         UpdateSpeed(MOVE_RUN, false);
     }
 
+    sScriptMgr->OnHealthChange(this, oldHealth, val);
+
     // group update
     if (IsPlayer())
     {
         Player* player = ToPlayer();
-        if (player->NeedSendSpectatorData())
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "CHP", val);
 
         if (player->GetGroup())
             player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_CUR_HP);
@@ -15762,9 +15757,6 @@ void Unit::SetHealth(uint32 val)
             if (Unit* owner = GetOwner())
                 if (Player* player = owner->ToPlayer())
                 {
-                    if (player->NeedSendSpectatorData() && pet->GetCreatureTemplate()->family)
-                        ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "PHP", (uint32)pet->GetHealthPct());
-
                     if (player->GetGroup())
                         player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_PET_CUR_HP);
                 }
@@ -15778,14 +15770,15 @@ void Unit::SetMaxHealth(uint32 val)
         val = 1;
 
     uint32 health = GetHealth();
+    uint32 oldMaxHealth = GetMaxHealth();
     SetUInt32Value(UNIT_FIELD_MAXHEALTH, val);
+
+    sScriptMgr->OnMaxHealthChange(this, oldMaxHealth, val);
 
     // group update
     if (IsPlayer())
     {
         Player* player = ToPlayer();
-        if (player->NeedSendSpectatorData())
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "MHP", val);
 
         if (player->GetGroup())
             player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_MAX_HP);
@@ -15797,9 +15790,6 @@ void Unit::SetMaxHealth(uint32 val)
             if (Unit* owner = GetOwner())
                 if (Player* player = owner->ToPlayer())
                 {
-                    if (player->NeedSendSpectatorData() && pet->GetCreatureTemplate()->family)
-                        ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "PHP", (uint32)pet->GetHealthPct());
-
                     if (player->GetGroup())
                         player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_PET_MAX_HP);
                 }
@@ -15819,6 +15809,8 @@ void Unit::SetPower(Powers power, uint32 val, bool withPowerUpdate /*= true*/, b
     if (maxPower < val)
         val = maxPower;
 
+    uint32 oldPower = GetPower(power);
+
     if (fromRegenerate)
     {
         UpdateUInt32Value(UNIT_FIELD_POWER1 + AsUnderlyingType(power), val);
@@ -15836,12 +15828,12 @@ void Unit::SetPower(Powers power, uint32 val, bool withPowerUpdate /*= true*/, b
         SendMessageToSet(&data, IsPlayer());
     }
 
+    sScriptMgr->OnPowerChange(this, power, oldPower, val);
+
     // group update
     if (IsPlayer())
     {
         Player* player = ToPlayer();
-        if (getPowerType() == power && player->NeedSendSpectatorData())
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "CPW", power == POWER_RAGE || power == POWER_RUNIC_POWER ? val / 10 : val);
 
         if (player->GetGroup())
             player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_CUR_POWER);
@@ -15864,14 +15856,15 @@ void Unit::SetPower(Powers power, uint32 val, bool withPowerUpdate /*= true*/, b
 void Unit::SetMaxPower(Powers power, uint32 val)
 {
     uint32 cur_power = GetPower(power);
+    uint32 oldMaxPower = GetMaxPower(power);
     SetStatInt32Value(static_cast<uint16>(UNIT_FIELD_MAXPOWER1) + power, val);
+
+    sScriptMgr->OnMaxPowerChange(this, power, oldMaxPower, val);
 
     // group update
     if (IsPlayer())
     {
         Player* player = ToPlayer();
-        if (getPowerType() == power && player->NeedSendSpectatorData())
-            ArenaSpectator::SendCommand_UInt32Value(FindMap(), GetGUID(), "MPW", power == POWER_RAGE || power == POWER_RUNIC_POWER ? val / 10 : val);
 
         if (player->GetGroup())
             player->SetGroupUpdateFlag(GROUP_UPDATE_FLAG_MAX_POWER);
