@@ -17,9 +17,11 @@
 
 // From SC
 void AddSC_spectator_commandscript();
+void AddSC_ArenaSpectatorHooks();
 
 // Add all scripts
 void Addmod_arena_spectatorScripts()
 {
     AddSC_spectator_commandscript();
+    AddSC_ArenaSpectatorHooks();
 }
