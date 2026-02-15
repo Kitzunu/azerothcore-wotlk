@@ -17,6 +17,8 @@
 
 #include "ACSoap.h"
 #include "AccountMgr.h"
+#include "Config.h"
+#include "IpAddressMatcher.h"
 #include "Log.h"
 #include "World.h"
 #include "soapStub.h"
@@ -41,12 +43,37 @@ void ACSoapThread(const std::string& host, uint16 port)
 
     LOG_INFO("network.soap", "ACSoap: bound to http://{}:{}", host, port);
 
+    // Load IP allowlist configuration
+    std::string allowedIpsConfig = sConfigMgr->GetOption<std::string>("SOAP.AllowedIPs", "");
+    Acore::Net::IpAddressMatcher ipMatcher(allowedIpsConfig);
+
+    if (!allowedIpsConfig.empty())
+        LOG_INFO("network.soap", "ACSoap: IP filtering enabled with pattern: {}", allowedIpsConfig);
+
     while (!World::IsStopped())
     {
         if (!soap_valid_socket(soap_accept(&soap)))
             continue;   // ran into an accept timeout
 
-        LOG_DEBUG("network.soap", "ACSoap: accepted connection from IP={}.{}.{}.{}", (int)(soap.ip >> 24) & 0xFF, (int)(soap.ip >> 16) & 0xFF, (int)(soap.ip >> 8) & 0xFF, (int)soap.ip & 0xFF);
+        // Convert IP from uint32 to string
+        std::string clientIp = fmt::format("{}.{}.{}.{}",
+            (soap.ip >> 24) & 0xFF,
+            (soap.ip >> 16) & 0xFF,
+            (soap.ip >> 8) & 0xFF,
+            soap.ip & 0xFF);
+
+        LOG_DEBUG("network.soap", "ACSoap: accepted connection from IP={}", clientIp);
+
+        // Check if IP is allowed
+        if (!ipMatcher.Matches(clientIp))
+        {
+            LOG_WARN("network.soap", "ACSoap: rejected connection from unauthorized IP={}", clientIp);
+            soap_send_fault(&soap);
+            soap_destroy(&soap);
+            soap_end(&soap);
+            continue;
+        }
+
         struct soap* thread_soap = soap_copy(&soap);// make a safe copy
 
         process_message(thread_soap);
