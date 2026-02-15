@@ -25,6 +25,13 @@ This module provides arena spectator functionality for AzerothCore, allowing pla
 
 This module is built into the core and does not require separate configuration.
 
+## Installation
+
+The module requires database commands to be registered. The SQL update file is located in:
+- `data/sql/updates/pending_db_world/rev_1771169308399303631.sql`
+
+This will be automatically applied when the server starts for the first time after installation.
+
 ## Credits
 
 This implementation is based on the original Arena Spectator system integrated into AzerothCore.
