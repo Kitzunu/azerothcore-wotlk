@@ -33,27 +33,34 @@ public:
         UNITHOOK_ON_POWER_TYPE_CHANGE
     }) { }
 
-    void OnHealthChange(Unit* unit, uint32 /*oldHealth*/, uint32 newHealth) override
+    void OnHealthChange(Unit* unit, uint32 /*oldHealth*/,
+        uint32 newHealth) override
     {
         // Handle player health updates
         if (Player* player = unit->ToPlayer())
         {
             if (player->NeedSendSpectatorData())
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "CHP", newHealth);
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "CHP",
+                    newHealth);
         }
         // Handle pet health updates
         else if (Creature* creature = unit->ToCreature())
         {
             if (Pet* pet = creature->ToPet())
             {
-                if (pet->isControlled() && pet->GetCreatureTemplate()->family)
+                if (pet->isControlled() &&
+                    pet->GetCreatureTemplate()->family)
                 {
                     if (Unit* owner = pet->GetOwner())
                     {
                         if (Player* ownerPlayer = owner->ToPlayer())
                         {
                             if (ownerPlayer->NeedSendSpectatorData())
-                                ArenaSpectator::SendCommand_UInt32Value(ownerPlayer->FindMap(), ownerPlayer->GetGUID(), "PHP", (uint32)pet->GetHealthPct());
+                                ArenaSpectator::SendCommand_UInt32Value(
+                                    ownerPlayer->FindMap(),
+                                    ownerPlayer->GetGUID(), "PHP",
+                                    (uint32)pet->GetHealthPct());
                         }
                     }
                 }
@@ -61,27 +68,34 @@ public:
         }
     }
 
-    void OnMaxHealthChange(Unit* unit, uint32 /*oldMaxHealth*/, uint32 newMaxHealth) override
+    void OnMaxHealthChange(Unit* unit, uint32 /*oldMaxHealth*/,
+        uint32 newMaxHealth) override
     {
         // Handle player max health updates
         if (Player* player = unit->ToPlayer())
         {
             if (player->NeedSendSpectatorData())
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "MHP", newMaxHealth);
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "MHP",
+                    newMaxHealth);
         }
         // Handle pet max health updates (affects health percentage)
         else if (Creature* creature = unit->ToCreature())
         {
             if (Pet* pet = creature->ToPet())
             {
-                if (pet->isControlled() && pet->GetCreatureTemplate()->family)
+                if (pet->isControlled() &&
+                    pet->GetCreatureTemplate()->family)
                 {
                     if (Unit* owner = pet->GetOwner())
                     {
                         if (Player* ownerPlayer = owner->ToPlayer())
                         {
                             if (ownerPlayer->NeedSendSpectatorData())
-                                ArenaSpectator::SendCommand_UInt32Value(ownerPlayer->FindMap(), ownerPlayer->GetGUID(), "PHP", (uint32)pet->GetHealthPct());
+                                ArenaSpectator::SendCommand_UInt32Value(
+                                    ownerPlayer->FindMap(),
+                                    ownerPlayer->GetGUID(), "PHP",
+                                    (uint32)pet->GetHealthPct());
                         }
                     }
                 }
@@ -89,37 +103,67 @@ public:
         }
     }
 
-    void OnPowerChange(Unit* unit, Powers power, uint32 /*oldPower*/, uint32 newPower) override
+    void OnPowerChange(Unit* unit, Powers power, uint32 /*oldPower*/,
+        uint32 newPower) override
     {
         if (Player* player = unit->ToPlayer())
         {
-            if (player->getPowerType() == power && player->NeedSendSpectatorData())
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "CPW",
-                    power == POWER_RAGE || power == POWER_RUNIC_POWER ? newPower / 10 : newPower);
+            if (player->getPowerType() == power &&
+                player->NeedSendSpectatorData())
+            {
+                uint32 powerValue = (power == POWER_RAGE ||
+                    power == POWER_RUNIC_POWER) ? newPower / 10 : newPower;
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "CPW",
+                    powerValue);
+            }
         }
     }
 
-    void OnMaxPowerChange(Unit* unit, Powers power, uint32 /*oldMaxPower*/, uint32 newMaxPower) override
+    void OnMaxPowerChange(Unit* unit, Powers power,
+        uint32 /*oldMaxPower*/, uint32 newMaxPower) override
     {
         if (Player* player = unit->ToPlayer())
         {
-            if (player->getPowerType() == power && player->NeedSendSpectatorData())
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "MPW",
-                    power == POWER_RAGE || power == POWER_RUNIC_POWER ? newMaxPower / 10 : newMaxPower);
+            if (player->getPowerType() == power &&
+                player->NeedSendSpectatorData())
+            {
+                uint32 powerValue = (power == POWER_RAGE ||
+                    power == POWER_RUNIC_POWER) ?
+                    newMaxPower / 10 : newMaxPower;
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "MPW",
+                    powerValue);
+            }
         }
     }
 
-    void OnPowerTypeChange(Unit* unit, Powers /*oldPowerType*/, Powers newPowerType) override
+    void OnPowerTypeChange(Unit* unit, Powers /*oldPowerType*/,
+        Powers newPowerType) override
     {
         if (Player* player = unit->ToPlayer())
         {
             if (player->NeedSendSpectatorData())
             {
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "PWT", newPowerType);
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "MPW",
-                    newPowerType == POWER_RAGE || newPowerType == POWER_RUNIC_POWER ? player->GetMaxPower(newPowerType) / 10 : player->GetMaxPower(newPowerType));
-                ArenaSpectator::SendCommand_UInt32Value(player->FindMap(), player->GetGUID(), "CPW",
-                    newPowerType == POWER_RAGE || newPowerType == POWER_RUNIC_POWER ? player->GetPower(newPowerType) / 10 : player->GetPower(newPowerType));
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "PWT",
+                    newPowerType);
+
+                uint32 maxPowerValue = (newPowerType == POWER_RAGE ||
+                    newPowerType == POWER_RUNIC_POWER) ?
+                    player->GetMaxPower(newPowerType) / 10 :
+                    player->GetMaxPower(newPowerType);
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "MPW",
+                    maxPowerValue);
+
+                uint32 powerValue = (newPowerType == POWER_RAGE ||
+                    newPowerType == POWER_RUNIC_POWER) ?
+                    player->GetPower(newPowerType) / 10 :
+                    player->GetPower(newPowerType);
+                ArenaSpectator::SendCommand_UInt32Value(
+                    player->FindMap(), player->GetGUID(), "CPW",
+                    powerValue);
             }
         }
     }

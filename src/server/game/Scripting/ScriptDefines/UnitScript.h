@@ -123,11 +123,13 @@ public:
     // Called when unit's power changes
     virtual void OnPowerChange(Unit* /*unit*/, Powers /*power*/, uint32 /*oldPower*/, uint32 /*newPower*/) { }
 
-    // Called when unit's max power changes  
-    virtual void OnMaxPowerChange(Unit* /*unit*/, Powers /*power*/, uint32 /*oldMaxPower*/, uint32 /*newMaxPower*/) { }
+    // Called when unit's max power changes
+    virtual void OnMaxPowerChange(Unit* /*unit*/, Powers /*power*/,
+        uint32 /*oldMaxPower*/, uint32 /*newMaxPower*/) { }
 
     // Called when unit's power type changes
-    virtual void OnPowerTypeChange(Unit* /*unit*/, Powers /*oldPowerType*/, Powers /*newPowerType*/) { }
+    virtual void OnPowerTypeChange(Unit* /*unit*/, Powers /*oldPowerType*/,
+        Powers /*newPowerType*/) { }
 };
 
 #endif
