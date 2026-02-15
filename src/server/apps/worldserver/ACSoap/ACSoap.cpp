@@ -20,6 +20,7 @@
 #include "Config.h"
 #include "IpAddressMatcher.h"
 #include "Log.h"
+#include "StringFormat.h"
 #include "World.h"
 #include "soapStub.h"
 
@@ -56,7 +57,7 @@ void ACSoapThread(const std::string& host, uint16 port)
             continue;   // ran into an accept timeout
 
         // Convert IP from uint32 to string
-        std::string clientIp = fmt::format("{}.{}.{}.{}",
+        std::string clientIp = Acore::StringFormat("{}.{}.{}.{}",
             (soap.ip >> 24) & 0xFF,
             (soap.ip >> 16) & 0xFF,
             (soap.ip >> 8) & 0xFF,
