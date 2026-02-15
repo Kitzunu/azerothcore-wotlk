@@ -23,4 +23,3 @@ void Addmod_arena_spectatorScripts()
 {
     AddSC_spectator_commandscript();
 }
-
