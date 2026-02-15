@@ -21,6 +21,9 @@ Added five new hooks to `UnitScript` for tracking unit stat changes:
 - `src/server/game/Scripting/ScriptDefines/UnitScript.cpp` - Added hook implementations
 - `src/server/game/Scripting/ScriptMgr.h` - Added ScriptMgr declarations
 
+**Files Removed:**
+- `src/server/game/Scripting/ScriptDefines/ArenaSpectatorScript.h` - Unused file created during development, never integrated
+
 ### 2. Unit.cpp Decoupled
 
 Replaced all direct ArenaSpectator calls in `Unit.cpp` with hook calls:
