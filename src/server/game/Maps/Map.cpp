@@ -715,9 +715,9 @@ void Map::RemovePlayerFromMap(Player* player, bool remove)
     sScriptMgr->OnPlayerLeaveMap(this, player);
     if (remove)
     {
-        // Remove player from group invites before deletion to prevent dangling pointers
-        if (Group* group = player->GetGroupInvite())
-            group->RemoveInvite(player);
+        // Remove player from group invites before deletion and handle cleanup
+        if (player->GetGroupInvite())
+            player->UninviteFromGroup();
 
         DeleteFromWorld(player);
     }
