@@ -29,10 +29,10 @@ namespace Acore::Net
      *
      * Supports patterns like:
      * - Exact IP: "192.168.0.1"
-     * - Wildcard octets: "192.168.0.%" (matches 192.168.0.0 to 192.168.0.254)
-     * - Multiple patterns: "127.0.0.1,192.168.%,10.0.0.%"
+     * - Wildcard octets: "192.168.0.%" (matches 192.168.0.0 to 192.168.0.255)
+     * - Multiple patterns: "127.0.0.1,192.168.0.%,10.0.%.%"
      *
-     * The '%' character represents any value from 0 to 254 in that octet.
+     * The '%' character represents any value from 0 to 255 in that octet.
      * An empty pattern list allows all IPs.
      */
     class AC_COMMON_API IpAddressMatcher

@@ -104,7 +104,8 @@ namespace Acore::Net
             }
         }
 
-        return index == 4 && stream.eof();
+        // Verify we got exactly 4 octets and no trailing characters
+        return index == 4 && stream.peek() == std::char_traits<char>::eof();
     }
 
     bool IpAddressMatcher::ParsePattern(std::string const& pattern, IpPattern& out)
@@ -138,6 +139,7 @@ namespace Acore::Net
             ++index;
         }
 
-        return index == 4 && stream.eof();
+        // Verify we got exactly 4 octets and no trailing characters
+        return index == 4 && stream.peek() == std::char_traits<char>::eof();
     }
 }
