@@ -725,7 +725,8 @@ void WorldSession::LogoutPlayer(bool save)
         // there are some positive auras from boss encounters that can be kept by logging out and logging in after boss is dead, and may be used on next bosses
         _player->RemoveAurasWithInterruptFlags(AURA_INTERRUPT_FLAG_CHANGE_MAP);
 
-        // Remove player from group invites and handle cleanup
+        // Remove player from group invites and disband temporary groups if needed
+        // This ensures Player A isn't stuck in an empty group if Player B (invitee) logs out
         if (_player->GetGroupInvite())
             _player->UninviteFromGroup();
 
