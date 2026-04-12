@@ -19,32 +19,108 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  actions: write
+  contents: read
+
 jobs:
   windows-build:
     strategy:
       fail-fast: false
       matrix:
-        os: [windows-latest]
+        os: [windows-2022]
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }}
-    env:
-      BOOST_ROOT: C:\local\boost_1_82_0
     if: |
       github.repository == 'azerothcore/azerothcore-wotlk'
       && !github.event.pull_request.draft
       && (github.ref == 'refs/heads/master' || contains(github.event.pull_request.labels.*.name, 'run-build') || github.event.label.name == 'run-build')
     steps:
       - uses: actions/checkout@v4
-      - name: ccache
-        uses: hendrikmuhs/ccache-action@v1.2.13
-      - name: Configure OS
+
+      - name: Process pending sql
         shell: bash
-        env:
-          CONTINUOUS_INTEGRATION: true
+        run: bash apps/ci/ci-pending-sql.sh
+
+      - name: Cache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/var/ccache
+          key: ccache:${{ matrix.os }}:msvc:${{ github.ref_name }}
+          restore-keys: |
+            ccache:${{ matrix.os }}:msvc:${{ github.ref_name }}
+            ccache:${{ matrix.os }}:msvc
+
+      - name: Install dependencies
+        shell: bash
         run: |
-          ./acore.sh install-deps
+          choco install -y --no-progress openssl --version=3.4.1
+
+          # Locate Boost from runner image (pre-installed)
+          # windows-2022 ships with Boost under C:\local
+          if ls C:/local/boost_*/lib 1>/dev/null 2>&1; then
+            BOOST_DIR=$(ls -d C:/local/boost_* | sort -V | tail -1)
+            echo "Found Boost at: $BOOST_DIR"
+            echo "BOOST_ROOT=$BOOST_DIR" >> "$GITHUB_ENV"
+          else
+            echo "::error::No pre-installed Boost found under C:\\local"
+            exit 1
+          fi
+
+      - name: Setup ccache
+        shell: bash
+        run: |
+          choco install -y --no-progress ccache
+          CCACHE_DIR="${GITHUB_WORKSPACE//\\//}/var/ccache"
+          mkdir -p "$CCACHE_DIR"
+          echo "CCACHE_BASEDIR=${GITHUB_WORKSPACE}" >> "$GITHUB_ENV"
+          echo "CCACHE_DIR=$CCACHE_DIR" >> "$GITHUB_ENV"
+          echo "CCACHE_MAXSIZE=1G" >> "$GITHUB_ENV"
+          echo "CCACHE_COMPRESS=1" >> "$GITHUB_ENV"
+          echo "CCACHE_COMPRESSLEVEL=9" >> "$GITHUB_ENV"
+          echo "CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime" >> "$GITHUB_ENV"
+          echo "CCACHE_COMPILERCHECK=content" >> "$GITHUB_ENV"
+
+      - name: ccache stats (pre-build)
+        shell: bash
+        run: ccache -s || true
+
+      - name: reset ccache stats
+        shell: bash
+        run: ccache -z || true
+
+      - name: Configure
+        shell: bash
+        run: |
+          set -x
+          mkdir build
+          cd build
+          cmake "$GITHUB_WORKSPACE" \
+            -DCMAKE_INSTALL_PREFIX="$GITHUB_WORKSPACE/env/dist" \
+            -DAPPS_BUILD="all" \
+            -DTOOLS_BUILD="all" \
+            -DSCRIPTS="static" \
+            -DMODULES="static" \
+            -DWITH_WARNINGS="ON" \
+            -DCMAKE_BUILD_TYPE="Release" \
+            -DCMAKE_CXX_COMPILER_LAUNCHER="ccache" \
+            -DCMAKE_C_COMPILER_LAUNCHER="ccache" \
+            -DBUILD_TESTING="ON" \
+            -DUSE_SCRIPTPCH="ON" \
+            -DUSE_COREPCH="ON" \
+            -DMYSQL_INCLUDE_DIR="C:/tools/mysql/current/include" \
+            -DMYSQL_LIBRARY="C:/tools/mysql/current/lib/mysqlclient.lib"
+
       - name: Build
         shell: bash
-        run: |
-          export CTOOLS_BUILD=all
-          ./acore.sh compiler build
+        working-directory: "${{ github.workspace }}/build"
+        run: cmake --build . --config "Release" -j $(($(nproc 2>/dev/null || echo ${NUMBER_OF_PROCESSORS:-4}) + 2))
+
+      - name: Install
+        shell: bash
+        working-directory: "${{ github.workspace }}/build"
+        run: cmake --install . --config "Release"
+
+      - name: ccache stats (post-build)
+        shell: bash
+        run: ccache -s || true
