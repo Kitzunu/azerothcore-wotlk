@@ -1733,13 +1733,25 @@ float WorldObject::GetSightRange(WorldObject const* target) const
                         return target->GetVisibilityOverrideDistance();
                     else if (ToPlayer()->GetCinematicMgr().IsOnCinematic())
                         return DEFAULT_VISIBILITY_INSTANCE;
+                    else if (IsInDalaran())
+                        return VISIBILITY_DISTANCE_SMALL;
                     else
                         return GetMap()->GetVisibilityRange();
                 }
 
-                return IsInWintergrasp() && target->IsInWintergrasp() ? VISIBILITY_DIST_WINTERGRASP : GetMap()->GetVisibilityRange();
+                if (IsInDalaran())
+                    return VISIBILITY_DISTANCE_SMALL;
+                else if (IsInWintergrasp() && target->IsInWintergrasp())
+                    return VISIBILITY_DIST_WINTERGRASP;
+                else
+                    return GetMap()->GetVisibilityRange();
             }
-            return IsInWintergrasp() ? VISIBILITY_DIST_WINTERGRASP : GetMap()->GetVisibilityRange();
+                if (IsInDalaran())
+                    return VISIBILITY_DISTANCE_SMALL;
+                else if (IsInWintergrasp())
+                    return VISIBILITY_DIST_WINTERGRASP;
+                else
+                    return GetMap()->GetVisibilityRange();
         }
         else if (ToCreature())
             return ToCreature()->m_SightDistance;
