@@ -1,0 +1,102 @@
+name: Codestyle Review
+
+# Runs after the C++/SQL codestyle checks complete. Because those checks run on
+# the `pull_request` event they only get a read-only token for fork PRs, so they
+# cannot post to the PR themselves. This workflow runs in the base-repo context
+# via `workflow_run`, where it has a write token, and posts/updates a single
+# COMMENT review with the detailed list of failures. It only reads the uploaded
+# artifact text (never checks out untrusted PR code), so it is safe.
+on:
+  workflow_run:
+    workflows:
+      - "C++ Codestyle"
+      - "SQL Codestyle"
+    types:
+      - completed
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Download codestyle report
+        id: download
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: codestyle-report
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Post or update review
+        if: steps.download.outcome == 'success'
+        uses: actions/github-script@v7
+        env:
+          WORKFLOW_NAME: ${{ github.event.workflow_run.name }}
+        with:
+          script: |
+            const fs = require('fs');
+
+            if (!fs.existsSync('pr-number.txt'))
+            {
+              core.info('No pr-number.txt in artifact; nothing to do.');
+              return;
+            }
+
+            const prNumber = parseInt(fs.readFileSync('pr-number.txt', 'utf8').trim(), 10);
+            if (!prNumber)
+            {
+              core.info('No valid PR number; nothing to do.');
+              return;
+            }
+
+            const { owner, repo } = context.repo;
+            const workflowName = process.env.WORKFLOW_NAME;
+            // Hidden marker so we can find and reuse our own review per check type
+            const marker = `<!-- codestyle-review:${workflowName} -->`;
+
+            const failed = fs.existsSync('codestyle-report.md');
+
+            const reviews = await github.paginate(github.rest.pulls.listReviews, {
+              owner, repo, pull_number: prNumber
+            });
+            const existing = reviews.find(r => r.body && r.body.includes(marker));
+
+            if (!failed)
+            {
+              // We only ever report failures. On success, clear a prior failure
+              // review (silent, no notification) if one exists, otherwise do nothing.
+              if (existing)
+              {
+                await github.rest.pulls.updateReview({
+                  owner, repo, pull_number: prNumber, review_id: existing.id,
+                  body: marker + `\n### ✅ ${workflowName} passed\n\nAll codestyle checks passed.`
+                });
+                core.info(`Cleared stale review ${existing.id} on PR #${prNumber}.`);
+              }
+              else
+              {
+                core.info('Check passed and no prior review exists; nothing to post.');
+              }
+              return;
+            }
+
+            const body = marker + "\n" + fs.readFileSync('codestyle-report.md', 'utf8');
+
+            if (existing)
+            {
+              // Update in place: avoids stacking a new review on every push.
+              await github.rest.pulls.updateReview({
+                owner, repo, pull_number: prNumber, review_id: existing.id, body
+              });
+              core.info(`Updated review ${existing.id} on PR #${prNumber}.`);
+            }
+            else
+            {
+              // First failure: create a COMMENT review so the author gets notified.
+              await github.rest.pulls.createReview({
+                owner, repo, pull_number: prNumber, event: 'COMMENT', body
+              });
+              core.info(`Created review on PR #${prNumber}.`);
+            }

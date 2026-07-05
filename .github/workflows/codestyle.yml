@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     name: C++
     if: ${{ !github.event.pull_request.draft }}
+    env:
+      CODESTYLE_REPORT_FILE: codestyle-report.md
     steps:
       - uses: actions/checkout@v4
       - name: Setup python
@@ -33,9 +35,31 @@ jobs:
         run: |
           sudo apt update -y
           sudo apt install -y cppcheck
-          cppcheck --force --inline-suppr --suppressions-list=./.suppress.cppcheck src/ --output-file=report.txt
+          cppcheck --force --inline-suppr --suppressions-list=./.suppress.cppcheck src/ \
+            --template='{file}:{line} — {severity}: {message}' --output-file=report.txt
 
           if [ -s report.txt ]; then  # if file is not empty
             cat report.txt
+            {
+              echo ''
+              echo '### ❌ cppcheck failed'
+              echo ''
+              echo 'The following issues were reported by cppcheck:'
+              echo ''
+              sed 's/^/- `/; s/ — /` — /' report.txt
+            } >> "$CODESTYLE_REPORT_FILE"
             exit 1 # let github action fails
           fi
+      - name: Save PR number
+        if: always()
+        run: echo "${{ github.event.pull_request.number }}" > pr-number.txt
+      - name: Upload codestyle report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codestyle-report
+          path: |
+            codestyle-report.md
+            pr-number.txt
+          if-no-files-found: ignore
+          retention-days: 1
