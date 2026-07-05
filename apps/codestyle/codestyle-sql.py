@@ -7,6 +7,9 @@ import subprocess
 
 base_dir = os.getcwd()
 
+# Detect GitHub Actions so we can emit inline annotations in addition to logs
+IN_CI = os.environ.get("GITHUB_ACTIONS") == "true"
+
 # Get the pending directory of the project
 pattern = os.path.join(base_dir, 'data/sql/updates/pending_db_*')
 src_directory = glob.glob(pattern)
@@ -21,6 +24,7 @@ archive_directory = glob.glob(archive_pattern)
 
 # Global variables
 error_handler = False
+findings = []  # (level, relative_path, line, message, detail) collected for the CI review report
 results = {
     "Multiple blank lines check": "Passed",
     "Trailing whitespace check": "Passed",
@@ -31,6 +35,50 @@ results = {
     "Directory check": "Passed",
     "Table engine check": "Passed"
 }
+
+# Print a finding to the log and, when running in GitHub Actions, emit an inline
+# annotation so the message shows up on the exact line in the PR diff. `detail`
+# is an optional extra note shown only in the log (annotations are single-line).
+# `level` maps to the GitHub annotation command ("error" or "warning").
+def report(message: str, file_path: str, line: int = None, detail: str = None, level: str = "error") -> None:
+    icon = "❌" if level == "error" else "❗"
+    human = f"{icon} {message}: {file_path}" + (f" at line {line}" if line is not None else "")
+    if detail:
+        human += f"\n{detail}"
+    print(human)
+    rel = os.path.relpath(file_path).replace(os.sep, "/")
+    findings.append((level, rel, line, message, detail))
+    if IN_CI:
+        loc = f"file={rel}" + (f",line={line}" if line is not None else "")
+        print(f"::{level} {loc}::{message}")
+
+# Write the collected findings to a file for the CI review workflow to pick up
+def write_report_file() -> None:
+    report_path = os.environ.get("CODESTYLE_REPORT_FILE")
+    if not report_path or not findings:
+        return
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write("### ❌ SQL Codestyle failed\n\n")
+        f.write("The following issues must be fixed before this PR can be merged:\n\n")
+        for level, rel, line, message, detail in findings:
+            icon = "❌" if level == "error" else "❗"
+            loc = f"`{rel}`" + (f" line {line}" if line is not None else "")
+            suffix = f" ({detail})" if detail else ""
+            f.write(f"- {icon} {loc} — {message}{suffix}\n")
+        f.write("\nSee the [SQL Standards](https://www.azerothcore.org/wiki/sql-standards).\n")
+
+# Write the pass/fail summary table to the GitHub Actions job summary page
+def write_job_summary() -> None:
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+    with open(summary_path, 'a', encoding='utf-8') as summary:
+        summary.write("## SQL Codestyle results\n\n")
+        summary.write("| Check | Result |\n| --- | --- |\n")
+        for check, result in results.items():
+            icon = "✅" if result == "Passed" else "❌"
+            summary.write(f"| {check} | {icon} {result} |\n")
+        summary.write("\n")
 
 # Collect all files in all directories
 def collect_files_from_directories(directories: list) -> list:
@@ -100,6 +148,8 @@ def parsing_file(files: list) -> None:
     print("\n ")
     for check, result in results.items():
         print(f"{check} : {result}")
+    write_job_summary()
+    write_report_file()
     if error_handler:
         print("\n ")
         print("\n❌ Please fix the codestyle issues above.")
@@ -119,13 +169,13 @@ def multiple_blank_lines_check(file: io, file_path: str) -> None:
         if line.strip() == '':
             consecutive_blank_lines += 1
             if consecutive_blank_lines > 1:
-                print(f"❌ Multiple blank lines found in {file_path} at line {line_number - 1}")
+                report("Multiple blank lines found", file_path, line_number - 1)
                 check_failed = True
         else:
             consecutive_blank_lines = 0
     # Additional check for the end of the file
     if consecutive_blank_lines >= 1:
-        print(f"❌ Multiple blank lines found at the end of: {file_path}")
+        report("Multiple blank lines found at the end of file", file_path)
         check_failed = True
     # Handle the script error and update the result output
     if check_failed:
@@ -140,7 +190,7 @@ def trailing_whitespace_check(file: io, file_path: str) -> None:
     # Parse all the file
     for line_number, line in enumerate(file, start = 1):
         if line.endswith(' \n'):
-            print(f"❌ Trailing whitespace found: {file_path} at line {line_number}")
+            report("Trailing whitespace found", file_path, line_number)
             check_failed = True
     if check_failed:
         error_handler = True
@@ -155,26 +205,27 @@ def sql_check(file: io, file_path: str) -> None:
     # Parse all the file
     for line_number, line in enumerate(file, start = 1):
         if [match for match in ['broadcast_text'] if match in line]:
-            print(
-                f"❌ DON'T EDIT broadcast_text TABLE UNLESS YOU KNOW WHAT YOU ARE DOING!\nThis error can safely be ignored if the changes are approved to be sniffed: {file_path} at line {line_number}")
+            report(
+                "DON'T EDIT broadcast_text TABLE UNLESS YOU KNOW WHAT YOU ARE DOING!",
+                file_path, line_number,
+                detail="This error can safely be ignored if the changes are approved to be sniffed.")
             check_failed = True
         if "EntryOrGuid" in line:
-            print(
-                f"❌ Please use entryorguid syntax instead of EntryOrGuid in {file_path} at line {line_number}\nWe recommend to use keira to have the right syntax in auto-query generation")
+            report(
+                "Please use entryorguid syntax instead of EntryOrGuid",
+                file_path, line_number,
+                detail="We recommend to use keira to have the right syntax in auto-query generation")
             check_failed = True
         if [match for match in [';;'] if match in line]:
-            print(
-                f"❌ Double semicolon (;;) found in {file_path} at line {line_number}")
+            report("Double semicolon (;;) found", file_path, line_number)
             check_failed = True
         if re.match(r"\t", line):
-            print(
-                f"❌ Tab found! Replace it to 4 spaces: {file_path} at line {line_number}")
+            report("Tab found! Replace it to 4 spaces", file_path, line_number)
             check_failed = True
 
         last_line = line[-1].strip()
         if last_line:
-            print(
-                f"❌ The last line is not a newline. Please add a newline: {file_path}")
+            report("The last line is not a newline. Please add a newline", file_path, line_number)
             check_failed = True
 
     # Handle the script error and update the result output
@@ -194,15 +245,16 @@ def insert_delete_safety_check(file: io, file_path: str) -> None:
         if line.strip().startswith("--"):
             continue
         if "INSERT" in line and "DELETE" not in previous_line:
-            print(f"❌ No DELETE keyword found before the INSERT in {file_path} at line {line_number}\nIf this error is intended, please notify a maintainer")
+            report("No DELETE keyword found before the INSERT", file_path, line_number,
+                   detail="If this error is intended, please notify a maintainer")
             check_failed = True
         previous_line = line
         match = re.match(r"DELETE FROM\s+`([^`]+)`", line, re.IGNORECASE)
         if match:
             table_name = match.group(1)
             if table_name in not_delete:
-                print(
-                    f"❌ Entries from {table_name} should not be deleted! {file_path} at line {line_number}\nIf this error is intended, please notify a maintainer")
+                report(f"Entries from {table_name} should not be deleted!", file_path, line_number,
+                       detail="If this error is intended, please notify a maintainer")
                 check_failed = True
 
     # Handle the script error and update the result output
@@ -259,7 +311,7 @@ def semicolon_check(file: io, file_path: str) -> None:
         stripped_line = stripped_line.split('--', 1)[0].strip()
 
         if stripped_line.upper().startswith("SET") and not stripped_line.endswith(";"):
-            print(f"❌ Missing semicolon in {file_path} at line {line_number}")
+            report("Missing semicolon", file_path, line_number)
             check_failed = True
 
         # Detect query start
@@ -278,16 +330,16 @@ def semicolon_check(file: io, file_path: str) -> None:
             if stripped_line.startswith('('):
                 # Get next non-blank line to detect if we're at the last row
                 next_line = get_next_non_blank_line(line_number)
-                
+
                 if next_line and next_line.startswith('('):
                     # Expect comma if another row follows
                     if not stripped_line.endswith(','):
-                        print(f"❌ Missing comma in {file_path} at line {line_number}")
+                        report("Missing comma", file_path, line_number)
                         check_failed = True
                 else:
                     # Expect semicolon if this is the final row
                     if not stripped_line.endswith(';'):
-                        print(f"❌ Missing semicolon in {file_path} at line {line_number}")
+                        report("Missing semicolon", file_path, line_number)
                         check_failed = True
                         inside_values_block = False
                         query_open = False
@@ -297,7 +349,7 @@ def semicolon_check(file: io, file_path: str) -> None:
         elif query_open and not inside_values_block:
             # Normal query handling (outside multi-row VALUES block)
             if line_number == total_lines and not stripped_line.endswith(';'):
-                print(f"❌ Missing semicolon in {file_path} at the last line {line_number}")
+                report("Missing semicolon at the last line", file_path, line_number)
                 check_failed = True
                 query_open = False
             elif stripped_line.endswith(';'):
@@ -314,7 +366,7 @@ def backtick_check(file: io, file_path: str) -> None:
 
     # Find SQL clauses
     pattern = re.compile(
-        r'\b(SELECT|FROM|JOIN|WHERE|GROUP BY|ORDER BY|DELETE FROM|UPDATE|INSERT INTO|SET|REPLACE|REPLACE INTO)\s+(.*?)(?=;$|(?=\b(?:WHERE|SET|VALUES)\b)|$)',  
+        r'\b(SELECT|FROM|JOIN|WHERE|GROUP BY|ORDER BY|DELETE FROM|UPDATE|INSERT INTO|SET|REPLACE|REPLACE INTO)\s+(.*?)(?=;$|(?=\b(?:WHERE|SET|VALUES)\b)|$)',
         re.IGNORECASE | re.DOTALL
     )
 
@@ -331,7 +383,7 @@ def backtick_check(file: io, file_path: str) -> None:
         # Strip inline comments (safe to do after removing quoted strings)
         sanitized_line = re.sub(r'--.*$', '', sanitized_line)
         matches = pattern.findall(sanitized_line)
-        
+
         for clause, content in matches:
             # Find all words and exclude @variables
             words = re.findall(r'\b(?<!@)([a-zA-Z_][a-zA-Z0-9_]*)\b', content)
@@ -357,7 +409,7 @@ def backtick_check(file: io, file_path: str) -> None:
 
                 # Make sure the word is enclosed in backticks
                 if not re.search(rf'`{re.escape(word)}`', content):
-                    print(f"❌ Missing backticks around ({word}). {file_path} at line {line_number}")
+                    report(f"Missing backticks around ({word})", file_path, line_number)
                     check_failed = True
 
     if check_failed:
@@ -375,12 +427,14 @@ def directory_check(file: io, file_path: str) -> None:
 
     # Fail if '/base/' is part of the path
     if "base" in path_parts:
-        print(f"❗ {file_path} is changed/added in the base directory.\nIf this is intended, please notify a maintainer.")
+        report(f"{file_path} is changed/added in the base directory.", file_path,
+               detail="If this is intended, please notify a maintainer.", level="warning")
         check_failed = True
 
     # Fail if '/archive/' is part of the path
     if "archive" in path_parts:
-        print(f"❗ {file_path} is changed/added in the archive directory.\nIf this is intended, please notify a maintainer.")
+        report(f"{file_path} is changed/added in the archive directory.", file_path,
+               detail="If this is intended, please notify a maintainer.", level="warning")
         check_failed = True
 
     if check_failed:
@@ -399,12 +453,12 @@ def non_innodb_engine_check(file: io, file_path: str) -> None:
         if match:
             engine = match.group(1).lower()
             if engine != "innodb":
-                print(f"❌ Non-InnoDB engine found: '{engine}' in {file_path} at line {line_number}")
+                report(f"Non-InnoDB engine found: '{engine}'", file_path, line_number)
                 check_failed = True
 
     if check_failed:
         error_handler = True
-        results["Table engine check"] = "Failed"    
+        results["Table engine check"] = "Failed"
 
 # Collect all files from matching directories
 all_files = collect_files_from_directories(src_directory) + collect_files_from_directories(base_directory) + collect_files_from_directories(archive_directory)
