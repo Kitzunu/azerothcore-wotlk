@@ -41,14 +41,21 @@ runs:
   steps:
     - name: echo cache key
       shell: bash
-      run: echo "Cache key -> ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}:${{ github.ref_name }}"
+      run: echo "Cache key -> ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}:${{ github.ref_name }}-${{ github.run_id }}"
 
+    # The primary key is unique per run (`-${{ github.run_id }}`) so every run
+    # saves a fresh cache. A static key would hit on itself on the second run
+    # and `actions/cache` would then skip the upload, freezing the cache after
+    # the first commit on a branch (and permanently on master). The restore-keys
+    # walk back from the most-recent cache on this branch to progressively
+    # broader fallbacks (branch -> pch variant -> modules variant -> compiler).
     - name: Cache
       uses: actions/cache@v4
       with:
         path: ${{ github.workspace }}/var/ccache
-        key: ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}:${{ github.ref_name }}
+        key: ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}:${{ github.ref_name }}-${{ github.run_id }}
         restore-keys: |
+          ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}:${{ github.ref_name }}-
           ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}:pch=${{ inputs.pch }}
           ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}:${{ inputs.modules }}
           ccache:${{ runner.os }}:${{ inputs.CC }}_${{ inputs.CXX }}
@@ -93,10 +100,14 @@ runs:
         CCACHE_BASEDIR=${GITHUB_WORKSPACE}
         CCACHE_DIR=${{ env.CCACHE_DIR }}
         CCACHE_HASHDIR=1
-        CCACHE_MAXSIZE=5G
+        # Keep the cache small enough that several run-id generations coexist
+        # under GitHub's 10G per-repo cache limit before LRU eviction kicks in.
+        CCACHE_MAXSIZE=2G
         CCACHE_SLOPPINESS=pch_defines,time_macros,include_file_mtime
         CCACHE_COMPRESS=1
-        CCACHE_COMPRESSLEVEL=9
+        # Level 9 spends a lot of CPU per object for marginal size gains; a low
+        # level is the recommended sweet spot for CI throughput.
+        CCACHE_COMPRESSLEVEL=3
         CCACHE_COMPILERCHECK=content
         CCACHE_LOGFILE=${{ env.CCACHE_DIR }}/cache.debug
         CC=${{ inputs.CC }}
