@@ -1,0 +1,2411 @@
+{
+  "$generated_by": "data/loom/tools/gen_opcodes.py — do not edit by hand",
+  "events": {
+    "update_ic": {
+      "type": 0,
+      "params": [
+        "initial_min",
+        "initial_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "InitialMin, InitialMax, RepeatMin, RepeatMax"
+    },
+    "update_ooc": {
+      "type": 1,
+      "params": [
+        "initial_min",
+        "initial_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "InitialMin, InitialMax, RepeatMin, RepeatMax"
+    },
+    "health_pct": {
+      "type": 2,
+      "params": [
+        "hp_min",
+        "hp_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "HPMin%, HPMax%,  RepeatMin, RepeatMax"
+    },
+    "mana_pct": {
+      "type": 3,
+      "params": [
+        "mana_min",
+        "mana_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "ManaMin%, ManaMax%, RepeatMin, RepeatMax"
+    },
+    "aggro": {
+      "type": 4,
+      "params": [],
+      "desc": "NONE"
+    },
+    "kill": {
+      "type": 5,
+      "params": [
+        "cooldown_min",
+        "cooldown_max",
+        "player_only",
+        "creature_entry"
+      ],
+      "desc": "CooldownMin0, CooldownMax1, playerOnly2, else creature entry3"
+    },
+    "death": {
+      "type": 6,
+      "params": [],
+      "desc": "NONE"
+    },
+    "evade": {
+      "type": 7,
+      "params": [],
+      "desc": "NONE"
+    },
+    "spellhit": {
+      "type": 8,
+      "params": [
+        "spell",
+        "school",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "SpellID, School, CooldownMin, CooldownMax"
+    },
+    "range": {
+      "type": 9,
+      "params": [
+        "min_dist",
+        "max_dist",
+        "repeat_min",
+        "repeat_max",
+        "range_min",
+        "range_max"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, rangeMin, rangeMax"
+    },
+    "ooc_los": {
+      "type": 10,
+      "params": [
+        "hostility_mode",
+        "max_rnage",
+        "cooldown_min",
+        "cooldown_max",
+        "player_only"
+      ],
+      "desc": "HostilityMode, MaxRnage, CooldownMin, CooldownMax, PlayerOnly"
+    },
+    "respawn": {
+      "type": 11,
+      "params": [
+        "type",
+        "map_id",
+        "zone_id"
+      ],
+      "desc": "type, MapId, ZoneId"
+    },
+    "target_health_pct": {
+      "type": 12,
+      "params": [
+        "hp_min",
+        "hp_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "HPMin%, HPMax%, RepeatMin, RepeatMax"
+    },
+    "victim_casting": {
+      "type": 13,
+      "params": [
+        "repeat_min",
+        "repeat_max",
+        "spell"
+      ],
+      "desc": "RepeatMin, RepeatMax, spellid"
+    },
+    "friendly_health": {
+      "type": 14,
+      "params": [
+        "hp_deficit",
+        "radius",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "HPDeficit, Radius, RepeatMin, RepeatMax"
+    },
+    "friendly_is_cc": {
+      "type": 15,
+      "params": [
+        "radius",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "Radius, RepeatMin, RepeatMax"
+    },
+    "friendly_missing_buff": {
+      "type": 16,
+      "params": [
+        "spell_id",
+        "radius",
+        "repeat_min",
+        "repeat_max",
+        "only_in_combat"
+      ],
+      "desc": "SpellId, Radius, RepeatMin, RepeatMax, onlyInCombat"
+    },
+    "summoned_unit": {
+      "type": 17,
+      "params": [
+        "creature_id",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "CreatureId(0 all), CooldownMin, CooldownMax"
+    },
+    "target_mana_pct": {
+      "type": 18,
+      "params": [
+        "mana_min",
+        "mana_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "ManaMin%, ManaMax%, RepeatMin, RepeatMax"
+    },
+    "accepted_quest": {
+      "type": 19,
+      "params": [
+        "quest_id",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "QuestID (0 = any), CooldownMin, CooldownMax"
+    },
+    "reward_quest": {
+      "type": 20,
+      "params": [
+        "quest_id",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "QuestID (0 = any), CooldownMin, CooldownMax"
+    },
+    "reached_home": {
+      "type": 21,
+      "params": [],
+      "desc": "NONE"
+    },
+    "receive_emote": {
+      "type": 22,
+      "params": [
+        "emote",
+        "cooldown_min",
+        "cooldown_max",
+        "condition",
+        "val",
+        "val_2"
+      ],
+      "desc": "EmoteId, CooldownMin, CooldownMax, condition, val1, val2, val3"
+    },
+    "has_aura": {
+      "type": 23,
+      "params": [
+        "param1_spell_id",
+        "param2_stack_amount",
+        "param",
+        "repeat_max"
+      ],
+      "desc": "Param1 = SpellID, Param2 = Stack amount, Param3/4 RepeatMin, RepeatMax"
+    },
+    "target_buffed": {
+      "type": 24,
+      "params": [
+        "param1_spell_id",
+        "param2_stack_amount",
+        "param",
+        "repeat_max"
+      ],
+      "desc": "Param1 = SpellID, Param2 = Stack amount, Param3/4 RepeatMin, RepeatMax"
+    },
+    "reset": {
+      "type": 25,
+      "params": [
+        "called_after_combat"
+      ],
+      "desc": "Called after combat, when the creature respawn and spawn."
+    },
+    "ic_los": {
+      "type": 26,
+      "params": [
+        "hostility_mode",
+        "max_rnage",
+        "cooldown_min",
+        "cooldown_max",
+        "player_only"
+      ],
+      "desc": "HostilityMode, MaxRnage, CooldownMin, CooldownMax, PlayerOnly"
+    },
+    "passenger_boarded": {
+      "type": 27,
+      "params": [
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "CooldownMin, CooldownMax"
+    },
+    "passenger_removed": {
+      "type": 28,
+      "params": [
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "CooldownMin, CooldownMax"
+    },
+    "charmed": {
+      "type": 29,
+      "params": [
+        "on_remove"
+      ],
+      "desc": "onRemove (0 - on apply, 1 - on remove)"
+    },
+    "charmed_target": {
+      "type": 30,
+      "params": [],
+      "desc": "NONE"
+    },
+    "spellhit_target": {
+      "type": 31,
+      "params": [
+        "spell",
+        "school",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "SpellID, School, CooldownMin, CooldownMax"
+    },
+    "damaged": {
+      "type": 32,
+      "params": [
+        "min_dmg",
+        "max_dmg",
+        "cooldown_min",
+        "cooldown_max",
+        "range_min"
+      ],
+      "desc": "MinDmg, MaxDmg, CooldownMin, CooldownMax, rangeMin (hpPct, if set: health check mode, one-shot)"
+    },
+    "damaged_target": {
+      "type": 33,
+      "params": [
+        "min_dmg",
+        "max_dmg",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "MinDmg, MaxDmg, CooldownMin, CooldownMax"
+    },
+    "movementinform": {
+      "type": 34,
+      "params": [
+        "movement_type",
+        "point",
+        "path"
+      ],
+      "desc": "MovementType(any), PointID, PathId(0 - any)"
+    },
+    "summon_despawned": {
+      "type": 35,
+      "params": [
+        "entry",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "Entry, CooldownMin, CooldownMax"
+    },
+    "corpse_removed": {
+      "type": 36,
+      "params": [],
+      "desc": "NONE"
+    },
+    "ai_init": {
+      "type": 37,
+      "params": [],
+      "desc": "NONE"
+    },
+    "data_set": {
+      "type": 38,
+      "params": [
+        "field",
+        "value",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "Id, Value, CooldownMin, CooldownMax"
+    },
+    "escort_start": {
+      "type": 39,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "escort_reached": {
+      "type": 40,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "transport_addplayer": {
+      "type": 41,
+      "params": [],
+      "desc": "NONE"
+    },
+    "transport_addcreature": {
+      "type": 42,
+      "params": [
+        "entry"
+      ],
+      "desc": "Entry (0 any)"
+    },
+    "transport_remove_player": {
+      "type": 43,
+      "params": [],
+      "desc": "NONE"
+    },
+    "transport_relocate": {
+      "type": 44,
+      "params": [
+        "point_id"
+      ],
+      "desc": "PointId"
+    },
+    "instance_player_enter": {
+      "type": 45,
+      "params": [
+        "team",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "Team (0 any), CooldownMin, CooldownMax"
+    },
+    "areatrigger_ontrigger": {
+      "type": 46,
+      "params": [
+        "trigger_id"
+      ],
+      "desc": "TriggerId(0 any)"
+    },
+    "quest_accepted": {
+      "type": 47,
+      "params": [],
+      "desc": "none"
+    },
+    "quest_obj_completion": {
+      "type": 48,
+      "params": [],
+      "desc": "none"
+    },
+    "quest_completion": {
+      "type": 49,
+      "params": [],
+      "desc": "none"
+    },
+    "quest_rewarded": {
+      "type": 50,
+      "params": [],
+      "desc": "none"
+    },
+    "quest_fail": {
+      "type": 51,
+      "params": [],
+      "desc": "none"
+    },
+    "text_over": {
+      "type": 52,
+      "params": [],
+      "desc": "GroupId from creature_text,  creature entry who talks (0 any)"
+    },
+    "receive_heal": {
+      "type": 53,
+      "params": [
+        "min_heal",
+        "max_heal",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "MinHeal, MaxHeal, CooldownMin, CooldownMax"
+    },
+    "just_summoned": {
+      "type": 54,
+      "params": [],
+      "desc": "none"
+    },
+    "escort_paused": {
+      "type": 55,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "escort_resumed": {
+      "type": 56,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "escort_stopped": {
+      "type": 57,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "escort_ended": {
+      "type": 58,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId(0any), pathID(0any)"
+    },
+    "timed_event_triggered": {
+      "type": 59,
+      "params": [
+        "id"
+      ],
+      "desc": "id"
+    },
+    "update": {
+      "type": 60,
+      "params": [
+        "initial_min",
+        "initial_max",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "InitialMin, InitialMax, RepeatMin, RepeatMax"
+    },
+    "gossip_select": {
+      "type": 62,
+      "params": [
+        "menu",
+        "option"
+      ],
+      "desc": "menuID, actionID"
+    },
+    "just_created": {
+      "type": 63,
+      "params": [],
+      "desc": "none"
+    },
+    "gossip_hello": {
+      "type": 64,
+      "params": [
+        "param1",
+        "always_execute_action"
+      ],
+      "desc": "event_para_1 (only) 0 = no filter set, always execute action, 1 = GossipHello only filter set, skip action if reportUse, 2 = reportUse only filter set, skip action if GossipHello"
+    },
+    "follow_completed": {
+      "type": 65,
+      "params": [],
+      "desc": "none"
+    },
+    "event_phase_change": {
+      "type": 66,
+      "params": [
+        "event_phase_mask"
+      ],
+      "desc": "event phase mask (<= SMART_EVENT_PHASE_ALL)"
+    },
+    "is_behind_target": {
+      "type": 67,
+      "params": [
+        "min",
+        "max",
+        "repeat_min",
+        "repeat_max",
+        "range_min",
+        "range_max"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, rangeMin, rangeMax"
+    },
+    "game_event_start": {
+      "type": 68,
+      "params": [
+        "game_event_entry"
+      ],
+      "desc": "game_event.Entry"
+    },
+    "game_event_end": {
+      "type": 69,
+      "params": [
+        "game_event_entry"
+      ],
+      "desc": "game_event.Entry"
+    },
+    "go_state_changed": {
+      "type": 70,
+      "params": [
+        "go_state"
+      ],
+      "desc": "go state"
+    },
+    "go_event_inform": {
+      "type": 71,
+      "params": [
+        "event_id"
+      ],
+      "desc": "eventId"
+    },
+    "action_done": {
+      "type": 72,
+      "params": [
+        "event_id"
+      ],
+      "desc": "eventId (SharedDefines.EventId)"
+    },
+    "on_spellclick": {
+      "type": 73,
+      "params": [
+        "clicker"
+      ],
+      "desc": "clicker (unit)"
+    },
+    "friendly_health_pct": {
+      "type": 74,
+      "params": [
+        "min",
+        "max",
+        "repeat_min",
+        "repeat_max",
+        "hp_pct",
+        "range"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, hpPct, range"
+    },
+    "distance_creature": {
+      "type": 75,
+      "params": [
+        "guid",
+        "entry",
+        "distance",
+        "repeat"
+      ],
+      "desc": "guid, entry, distance, repeat"
+    },
+    "distance_gameobject": {
+      "type": 76,
+      "params": [
+        "guid",
+        "entry",
+        "distance",
+        "repeat"
+      ],
+      "desc": "guid, entry, distance, repeat"
+    },
+    "counter_set": {
+      "type": 77,
+      "params": [
+        "id",
+        "value",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "id, value, cooldownMin, cooldownMax"
+    },
+    "scene_start": {
+      "type": 78,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "scene_trigger": {
+      "type": 79,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "scene_cancel": {
+      "type": 80,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "scene_complete": {
+      "type": 81,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "summoned_unit_dies": {
+      "type": 82,
+      "params": [
+        "creature_id",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "CreatureId(0 all), CooldownMin, CooldownMax"
+    },
+    "near_players": {
+      "type": 101,
+      "params": [
+        "min",
+        "radius",
+        "first_timer",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "min, radius, first timer, repeatMin, repeatMax"
+    },
+    "near_players_negation": {
+      "type": 102,
+      "params": [
+        "max",
+        "radius",
+        "first_timer",
+        "repeat_min",
+        "repeat_max"
+      ],
+      "desc": "max, radius, first timer, repeatMin, repeatMax"
+    },
+    "near_unit": {
+      "type": 103,
+      "params": [
+        "type",
+        "entry",
+        "count",
+        "range",
+        "timer"
+      ],
+      "desc": "type (0: creature 1: gob), entry, count, range, timer"
+    },
+    "near_unit_negation": {
+      "type": 104,
+      "params": [
+        "type",
+        "entry",
+        "count",
+        "range",
+        "timer"
+      ],
+      "desc": "type (0: creature 1: gob), entry, count, range, timer"
+    },
+    "area_casting": {
+      "type": 105,
+      "params": [
+        "min",
+        "max",
+        "repeat_min",
+        "repeat_max",
+        "range_min",
+        "range_max"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, rangeMin, rangeMax"
+    },
+    "area_range": {
+      "type": 106,
+      "params": [
+        "min",
+        "max",
+        "repeat_min",
+        "repeat_max",
+        "range_min",
+        "range_max"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, rangeMin, rangeMax"
+    },
+    "summoned_unit_evade": {
+      "type": 107,
+      "params": [
+        "creature_id",
+        "cooldown_min",
+        "cooldown_max"
+      ],
+      "desc": "CreatureId(0 all), CooldownMin, CooldownMax"
+    },
+    "waypoint_reached": {
+      "type": 108,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId (0: any), pathId (0: any)"
+    },
+    "waypoint_ended": {
+      "type": 109,
+      "params": [
+        "point_id",
+        "path_id"
+      ],
+      "desc": "PointId (0: any), pathId (0: any)"
+    },
+    "is_in_melee_range": {
+      "type": 110,
+      "params": [
+        "min",
+        "max",
+        "repeat_min",
+        "repeat_max",
+        "dist",
+        "invert"
+      ],
+      "desc": "min, max, repeatMin, repeatMax, dist, invert (0: false, 1: true)"
+    }
+  },
+  "actions": {
+    "none": {
+      "type": 0,
+      "params": [],
+      "desc": "No action"
+    },
+    "talk": {
+      "type": 1,
+      "params": [
+        "group",
+        "duration",
+        "use_invoker",
+        "use_talk_target"
+      ],
+      "desc": "groupID from creature_text, duration to wait before TEXT_OVER event is triggered, use first target from targetlist as invoker, useTalkTarget (0/1) - use target as talk target"
+    },
+    "set_faction": {
+      "type": 2,
+      "params": [
+        "faction"
+      ],
+      "desc": "FactionId (or 0 for default)"
+    },
+    "morph_to_entry_or_model": {
+      "type": 3,
+      "params": [],
+      "desc": "Creature_template entry(param1) OR ModelId (param2) (or 0 for both to demorph)"
+    },
+    "sound": {
+      "type": 4,
+      "params": [
+        "sound_id",
+        "only_self",
+        "distance"
+      ],
+      "desc": "SoundId, onlySelf, distance"
+    },
+    "play_emote": {
+      "type": 5,
+      "params": [
+        "emote"
+      ],
+      "desc": "EmoteId"
+    },
+    "fail_quest": {
+      "type": 6,
+      "params": [
+        "quest_id"
+      ],
+      "desc": "QuestID"
+    },
+    "offer_quest": {
+      "type": 7,
+      "params": [
+        "quest_id",
+        "direct_add"
+      ],
+      "desc": "QuestID, directAdd"
+    },
+    "set_react_state": {
+      "type": 8,
+      "params": [
+        "state"
+      ],
+      "desc": "state"
+    },
+    "activate_gobject": {
+      "type": 9,
+      "params": [],
+      "desc": ""
+    },
+    "random_emote": {
+      "type": 10,
+      "params": [
+        "emote_id",
+        "emote_id_2",
+        "emote_id_3"
+      ],
+      "desc": "EmoteId1, EmoteId2, EmoteId3..."
+    },
+    "cast": {
+      "type": 11,
+      "params": [
+        "spell",
+        "cast_flags",
+        "trigger_flags",
+        "targets_limit"
+      ],
+      "desc": "spellID, castFlags, triggerFlags, targetsLimit"
+    },
+    "summon_creature": {
+      "type": 12,
+      "params": [
+        "creature",
+        "summon_type",
+        "duration",
+        "attack_invoker",
+        "attack_owner",
+        "flags"
+      ],
+      "desc": "CreatureID, summonType, duration in ms, attackInvoker, attackScriptOwner, flags(SmartActionSummonCreatureFlags)"
+    },
+    "threat_single_pct": {
+      "type": 13,
+      "params": [
+        "threat"
+      ],
+      "desc": "Threat%"
+    },
+    "threat_all_pct": {
+      "type": 14,
+      "params": [
+        "threat"
+      ],
+      "desc": "Threat%"
+    },
+    "call_areaexploredoreventhappens": {
+      "type": 15,
+      "params": [
+        "quest_id"
+      ],
+      "desc": "QuestID"
+    },
+    "reserved_16": {
+      "type": 16,
+      "params": [],
+      "desc": "used on 4.3.4 and higher scripts"
+    },
+    "set_emote_state": {
+      "type": 17,
+      "params": [
+        "emote"
+      ],
+      "desc": "emoteID"
+    },
+    "set_unit_flag": {
+      "type": 18,
+      "params": [
+        "flags",
+        "target"
+      ],
+      "desc": "Flags (may be more than one field OR'd together), Target"
+    },
+    "remove_unit_flag": {
+      "type": 19,
+      "params": [
+        "flags",
+        "target"
+      ],
+      "desc": "Flags (may be more than one field OR'd together), Target"
+    },
+    "auto_attack": {
+      "type": 20,
+      "params": [
+        "allow_attack_state"
+      ],
+      "desc": "AllowAttackState (0 = stop attack, anything else means continue attacking)"
+    },
+    "allow_combat_movement": {
+      "type": 21,
+      "params": [
+        "allow_combat_movement"
+      ],
+      "desc": "AllowCombatMovement (0 = stop combat based movement, anything else continue attacking)"
+    },
+    "set_event_phase": {
+      "type": 22,
+      "params": [
+        "phase"
+      ],
+      "desc": "Phase"
+    },
+    "inc_event_phase": {
+      "type": 23,
+      "params": [
+        "value"
+      ],
+      "desc": "Value (may be negative to decrement phase, should not be 0)"
+    },
+    "evade": {
+      "type": 24,
+      "params": [],
+      "desc": "No Params"
+    },
+    "flee_for_assist": {
+      "type": 25,
+      "params": [
+        "with_emote"
+      ],
+      "desc": "With Emote"
+    },
+    "call_groupeventhappens": {
+      "type": 26,
+      "params": [
+        "quest_id"
+      ],
+      "desc": "QuestID"
+    },
+    "combat_stop": {
+      "type": 27,
+      "params": [],
+      "desc": "No Params"
+    },
+    "removeaurasfromspell": {
+      "type": 28,
+      "params": [
+        "spellid",
+        "charges"
+      ],
+      "desc": "Spellid (0 removes all auras), charges (0 removes aura)"
+    },
+    "follow": {
+      "type": 29,
+      "params": [
+        "distance",
+        "angle",
+        "end_creature_entry",
+        "credit",
+        "credit_type",
+        "alive_state"
+      ],
+      "desc": "Distance (0 = default), Angle (0 = default), EndCreatureEntry, credit, creditType (0monsterkill, 1event), aliveState (0 = creature must be alive, 1 = dead creature can trigger arrival)"
+    },
+    "random_phase": {
+      "type": 30,
+      "params": [
+        "phase_id",
+        "phase_id_2",
+        "phase_id_3"
+      ],
+      "desc": "PhaseId1, PhaseId2, PhaseId3..."
+    },
+    "random_phase_range": {
+      "type": 31,
+      "params": [
+        "phase_min",
+        "phase_max"
+      ],
+      "desc": "PhaseMin, PhaseMax"
+    },
+    "reset_gobject": {
+      "type": 32,
+      "params": [],
+      "desc": ""
+    },
+    "call_killedmonster": {
+      "type": 33,
+      "params": [
+        "creature_id"
+      ],
+      "desc": "CreatureId,"
+    },
+    "set_inst_data": {
+      "type": 34,
+      "params": [
+        "field",
+        "value"
+      ],
+      "desc": "Field, Data"
+    },
+    "set_inst_data64": {
+      "type": 35,
+      "params": [
+        "field"
+      ],
+      "desc": "Field,"
+    },
+    "update_template": {
+      "type": 36,
+      "params": [
+        "entry",
+        "update_level"
+      ],
+      "desc": "Entry, UpdateLevel"
+    },
+    "die": {
+      "type": 37,
+      "params": [
+        "milliseconds"
+      ],
+      "desc": "Milliseconds"
+    },
+    "set_in_combat_with_zone": {
+      "type": 38,
+      "params": [
+        "range"
+      ],
+      "desc": "Range (if outside of dungeon)"
+    },
+    "call_for_help": {
+      "type": 39,
+      "params": [
+        "radius",
+        "with_emote"
+      ],
+      "desc": "Radius, With Emote"
+    },
+    "set_sheath": {
+      "type": 40,
+      "params": [
+        "sheath"
+      ],
+      "desc": "Sheath (0-unarmed, 1-melee, 2-ranged)"
+    },
+    "force_despawn": {
+      "type": 41,
+      "params": [
+        "delay"
+      ],
+      "desc": "timer"
+    },
+    "set_invincibility_hp_level": {
+      "type": 42,
+      "params": [
+        "min_hp_value"
+      ],
+      "desc": "MinHpValue(+pct, -flat)"
+    },
+    "mount_to_entry_or_model": {
+      "type": 43,
+      "params": [],
+      "desc": "Creature_template entry(param1) OR ModelId (param2) (or 0 for both to dismount)"
+    },
+    "set_ingame_phase_mask": {
+      "type": 44,
+      "params": [
+        "mask"
+      ],
+      "desc": "mask"
+    },
+    "set_data": {
+      "type": 45,
+      "params": [
+        "field",
+        "value"
+      ],
+      "desc": "Field, Data (only creature TODO)"
+    },
+    "move_forward": {
+      "type": 46,
+      "params": [
+        "distance"
+      ],
+      "desc": "distance"
+    },
+    "set_visibility": {
+      "type": 47,
+      "params": [],
+      "desc": "on/off"
+    },
+    "set_active": {
+      "type": 48,
+      "params": [],
+      "desc": "on/off"
+    },
+    "attack_start": {
+      "type": 49,
+      "params": [],
+      "desc": ""
+    },
+    "summon_go": {
+      "type": 50,
+      "params": [
+        "game_object_id",
+        "despawn_time",
+        "target_summon",
+        "summon_type"
+      ],
+      "desc": "GameObjectID, DespawnTime, targetSummon, summonType (0 time or summoner dies/1 time)"
+    },
+    "kill_unit": {
+      "type": 51,
+      "params": [],
+      "desc": ""
+    },
+    "activate_taxi": {
+      "type": 52,
+      "params": [
+        "taxi_id"
+      ],
+      "desc": "TaxiID"
+    },
+    "escort_start": {
+      "type": 53,
+      "params": [
+        "run",
+        "path_id",
+        "can_repeat",
+        "quest",
+        "despawntime",
+        "react_state"
+      ],
+      "desc": "run/walk, pathID, canRepeat, quest, despawntime, reactState"
+    },
+    "escort_pause": {
+      "type": 54,
+      "params": [
+        "time"
+      ],
+      "desc": "time"
+    },
+    "escort_stop": {
+      "type": 55,
+      "params": [
+        "despawn_time",
+        "quest",
+        "fail"
+      ],
+      "desc": "despawnTime, quest, fail?"
+    },
+    "add_item": {
+      "type": 56,
+      "params": [
+        "item_id",
+        "count"
+      ],
+      "desc": "itemID, count"
+    },
+    "remove_item": {
+      "type": 57,
+      "params": [
+        "item_id",
+        "count"
+      ],
+      "desc": "itemID, count"
+    },
+    "install_ai_template": {
+      "type": 58,
+      "params": [
+        "ai_template_id"
+      ],
+      "desc": "AITemplateID"
+    },
+    "set_run": {
+      "type": 59,
+      "params": [],
+      "desc": "0/1"
+    },
+    "set_fly": {
+      "type": 60,
+      "params": [],
+      "desc": "0/1"
+    },
+    "set_swim": {
+      "type": 61,
+      "params": [],
+      "desc": "0/1"
+    },
+    "teleport": {
+      "type": 62,
+      "params": [
+        "map_id"
+      ],
+      "desc": "mapID,"
+    },
+    "set_counter": {
+      "type": 63,
+      "params": [
+        "id",
+        "value",
+        "reset"
+      ],
+      "desc": "id, value, reset (0/1)"
+    },
+    "store_target_list": {
+      "type": 64,
+      "params": [
+        "var_id"
+      ],
+      "desc": "varID,"
+    },
+    "escort_resume": {
+      "type": 65,
+      "params": [],
+      "desc": "none"
+    },
+    "set_orientation": {
+      "type": 66,
+      "params": [
+        "quick_change",
+        "random_orientation",
+        "turn_angle"
+      ],
+      "desc": "quick change, random orientation? (0/1), turnAngle"
+    },
+    "create_timed_event": {
+      "type": 67,
+      "params": [
+        "id",
+        "initial_min",
+        "initial_max",
+        "repeat_min",
+        "repeat_max",
+        "chance"
+      ],
+      "desc": "id, InitialMin, InitialMax, RepeatMin(only if it repeats), RepeatMax(only if it repeats), chance"
+    },
+    "playmovie": {
+      "type": 68,
+      "params": [
+        "entry"
+      ],
+      "desc": "entry"
+    },
+    "move_to_pos": {
+      "type": 69,
+      "params": [
+        "point",
+        "transport",
+        "controlled",
+        "contact_distance"
+      ],
+      "desc": "PointId (optional x,y,z offset), transport, controlled, ContactDistance"
+    },
+    "respawn_target": {
+      "type": 70,
+      "params": [
+        "force"
+      ],
+      "desc": "force / goRespawnTime"
+    },
+    "equip": {
+      "type": 71,
+      "params": [
+        "entry",
+        "slotmask_slot",
+        "slot",
+        "slot_2",
+        "param5",
+        "bits_are"
+      ],
+      "desc": "entry, slotmask slot1, slot2, slot3   , only slots with mask set will be sent to client, bits are 1, 2, 4, leaving mask 0 is defaulted to mask 7 (send all), slots1-3 are only used if no entry is set"
+    },
+    "close_gossip": {
+      "type": 72,
+      "params": [],
+      "desc": "none"
+    },
+    "trigger_timed_event": {
+      "type": 73,
+      "params": [
+        "id"
+      ],
+      "desc": "id(>1)"
+    },
+    "remove_timed_event": {
+      "type": 74,
+      "params": [
+        "id"
+      ],
+      "desc": "id(>1)"
+    },
+    "add_aura": {
+      "type": 75,
+      "params": [
+        "spell",
+        "target"
+      ],
+      "desc": "spellid,  targets"
+    },
+    "override_script_base_object": {
+      "type": 76,
+      "params": [],
+      "desc": "WARNING: CAN CRASH CORE, do not use if you dont know what you are doing"
+    },
+    "reset_script_base_object": {
+      "type": 77,
+      "params": [],
+      "desc": "none"
+    },
+    "call_script_reset": {
+      "type": 78,
+      "params": [],
+      "desc": "none"
+    },
+    "set_ranged_movement": {
+      "type": 79,
+      "params": [
+        "distance",
+        "angle"
+      ],
+      "desc": "Distance, angle"
+    },
+    "call_timed_actionlist": {
+      "type": 80,
+      "params": [
+        "id",
+        "stop_after_combat",
+        "timer_update_type"
+      ],
+      "desc": "ID (overwrites already running actionlist), stop after combat?(0/1), timer update type(0-OOC, 1-IC, 2-ALWAYS)"
+    },
+    "set_npc_flag": {
+      "type": 81,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "add_npc_flag": {
+      "type": 82,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "remove_npc_flag": {
+      "type": 83,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "simple_talk": {
+      "type": 84,
+      "params": [
+        "group_id"
+      ],
+      "desc": "groupID, can be used to make players say groupID, Text_over event is not triggered, whisper can not be used (Target units will say the text)"
+    },
+    "self_cast": {
+      "type": 85,
+      "params": [
+        "spell",
+        "cast_flags",
+        "trigger_flags",
+        "targets_limit"
+      ],
+      "desc": "spellID, castFlags, triggerFlags, targetsLimit"
+    },
+    "cross_cast": {
+      "type": 86,
+      "params": [
+        "spell_id",
+        "cast_flags",
+        "caster_target_type",
+        "caster_target_param",
+        "caster_target_param_2",
+        "caster_target_param_3"
+      ],
+      "desc": "spellID, castFlags, CasterTargetType, CasterTarget param1, CasterTarget param2, CasterTarget param3, ( + the origonal target fields as Destination target),   CasterTargets will cast spellID on all Targets (use with caution if targeting multiple * multiple units)"
+    },
+    "call_random_timed_actionlist": {
+      "type": 87,
+      "params": [
+        "script9_ids_1"
+      ],
+      "desc": "script9 ids 1-9"
+    },
+    "call_random_range_timed_actionlist": {
+      "type": 88,
+      "params": [
+        "script9_id_min",
+        "max"
+      ],
+      "desc": "script9 id min, max"
+    },
+    "random_move": {
+      "type": 89,
+      "params": [
+        "max_dist"
+      ],
+      "desc": "maxDist"
+    },
+    "set_unit_field_bytes_1": {
+      "type": 90,
+      "params": [
+        "bytes",
+        "target"
+      ],
+      "desc": "bytes, target"
+    },
+    "remove_unit_field_bytes_1": {
+      "type": 91,
+      "params": [
+        "bytes",
+        "target"
+      ],
+      "desc": "bytes, target"
+    },
+    "interrupt_spell": {
+      "type": 92,
+      "params": [],
+      "desc": ""
+    },
+    "send_go_custom_anim": {
+      "type": 93,
+      "params": [
+        "anim_id"
+      ],
+      "desc": "anim id"
+    },
+    "set_dynamic_flag": {
+      "type": 94,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "add_dynamic_flag": {
+      "type": 95,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "remove_dynamic_flag": {
+      "type": 96,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "jump_to_pos": {
+      "type": 97,
+      "params": [
+        "speed_xy",
+        "speed_z",
+        "self_jump"
+      ],
+      "desc": "speedXY, speedZ, selfJump"
+    },
+    "send_gossip_menu": {
+      "type": 98,
+      "params": [
+        "menu_id",
+        "option_id"
+      ],
+      "desc": "menuId, optionId"
+    },
+    "go_set_loot_state": {
+      "type": 99,
+      "params": [
+        "state"
+      ],
+      "desc": "state"
+    },
+    "send_target_to_target": {
+      "type": 100,
+      "params": [
+        "id"
+      ],
+      "desc": "id"
+    },
+    "set_home_pos": {
+      "type": 101,
+      "params": [],
+      "desc": "SpawnPos"
+    },
+    "set_health_regen": {
+      "type": 102,
+      "params": [
+        "enabled"
+      ],
+      "desc": "0/1"
+    },
+    "set_root": {
+      "type": 103,
+      "params": [],
+      "desc": "off/on"
+    },
+    "set_go_flag": {
+      "type": 104,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "add_go_flag": {
+      "type": 105,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "remove_go_flag": {
+      "type": 106,
+      "params": [
+        "flags"
+      ],
+      "desc": "Flags"
+    },
+    "summon_creature_group": {
+      "type": 107,
+      "params": [
+        "group",
+        "attack_invoker",
+        "attack_script_owner"
+      ],
+      "desc": "Group, attackInvoker, attackScriptOwner"
+    },
+    "set_power": {
+      "type": 108,
+      "params": [
+        "power_type",
+        "new_power"
+      ],
+      "desc": "PowerType, newPower"
+    },
+    "add_power": {
+      "type": 109,
+      "params": [
+        "power_type",
+        "new_power"
+      ],
+      "desc": "PowerType, newPower"
+    },
+    "remove_power": {
+      "type": 110,
+      "params": [
+        "power_type",
+        "new_power"
+      ],
+      "desc": "PowerType, newPower"
+    },
+    "game_event_stop": {
+      "type": 111,
+      "params": [
+        "game_event_id"
+      ],
+      "desc": "GameEventId"
+    },
+    "game_event_start": {
+      "type": 112,
+      "params": [
+        "game_event_id"
+      ],
+      "desc": "GameEventId"
+    },
+    "start_closest_waypoint": {
+      "type": 113,
+      "params": [
+        "wp",
+        "wp_2",
+        "wp_3",
+        "wp_4",
+        "wp_5",
+        "wp_6"
+      ],
+      "desc": "wp1, wp2, wp3, wp4, wp5, wp6, wp7"
+    },
+    "rise_up": {
+      "type": 114,
+      "params": [
+        "distance"
+      ],
+      "desc": "distance"
+    },
+    "random_sound": {
+      "type": 115,
+      "params": [
+        "sound_id",
+        "sound_id_2",
+        "sound_id_3",
+        "sound_id_4",
+        "only_self",
+        "distance"
+      ],
+      "desc": "SoundId1, SoundId2, SoundId3, SoundId4, onlySelf, distance"
+    },
+    "set_corpse_delay": {
+      "type": 116,
+      "params": [
+        "timer"
+      ],
+      "desc": "timer"
+    },
+    "disable_evade": {
+      "type": 117,
+      "params": [],
+      "desc": "0/1 (1 = disabled, 0 = enabled)"
+    },
+    "go_set_go_state": {
+      "type": 118,
+      "params": [
+        "state"
+      ],
+      "desc": "state"
+    },
+    "set_can_fly": {
+      "type": 119,
+      "params": [],
+      "desc": "@todo: NOT SUPPORTED YET"
+    },
+    "remove_auras_by_type": {
+      "type": 120,
+      "params": [],
+      "desc": "@todo: NOT SUPPORTED YET"
+    },
+    "set_sight_dist": {
+      "type": 121,
+      "params": [
+        "sight_distance"
+      ],
+      "desc": "sightDistance"
+    },
+    "flee": {
+      "type": 122,
+      "params": [
+        "flee_time"
+      ],
+      "desc": "fleeTime"
+    },
+    "add_threat": {
+      "type": 123,
+      "params": [
+        "threat",
+        "threat_2"
+      ],
+      "desc": "+threat, -threat"
+    },
+    "load_equipment": {
+      "type": 124,
+      "params": [
+        "id"
+      ],
+      "desc": "id"
+    },
+    "trigger_random_timed_event": {
+      "type": 125,
+      "params": [
+        "id_min_range",
+        "id_max_range"
+      ],
+      "desc": "id min range, id max range"
+    },
+    "remove_all_gameobjects": {
+      "type": 126,
+      "params": [],
+      "desc": ""
+    },
+    "remove_movement": {
+      "type": 127,
+      "params": [],
+      "desc": "@todo: NOT SUPPORTED YET"
+    },
+    "play_animkit": {
+      "type": 128,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "scene_play": {
+      "type": 129,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "scene_cancel": {
+      "type": 130,
+      "params": [],
+      "desc": "don't use on 3.3.5a"
+    },
+    "spawn_spawngroup": {
+      "type": 131,
+      "params": [
+        "group_id",
+        "ignore_respawn",
+        "force"
+      ],
+      "desc": "groupId, ignoreRespawn, force"
+    },
+    "despawn_spawngroup": {
+      "type": 132,
+      "params": [
+        "group_id",
+        "delete_respawn_times"
+      ],
+      "desc": "groupId, deleteRespawnTimes"
+    },
+    "respawn_by_spawnid": {
+      "type": 133,
+      "params": [],
+      "desc": "@todo: NOT SUPPORTED YET"
+    },
+    "invoker_cast": {
+      "type": 134,
+      "params": [
+        "spell",
+        "cast_flags",
+        "trigger_flags",
+        "targets_limit"
+      ],
+      "desc": "spellID, castFlags, triggerFlags, targetsLimit"
+    },
+    "play_cinematic": {
+      "type": 135,
+      "params": [
+        "entry"
+      ],
+      "desc": "entry"
+    },
+    "set_movement_speed": {
+      "type": 136,
+      "params": [
+        "movement_type",
+        "speed_integer",
+        "speed_fraction"
+      ],
+      "desc": "movementType, speedInteger, speedFraction"
+    },
+    "set_health_pct": {
+      "type": 142,
+      "params": [
+        "percent"
+      ],
+      "desc": "percent"
+    },
+    "move_to_pos_target": {
+      "type": 201,
+      "params": [
+        "point_id"
+      ],
+      "desc": "pointId"
+    },
+    "exit_vehicle": {
+      "type": 203,
+      "params": [],
+      "desc": "none"
+    },
+    "set_unit_movement_flags": {
+      "type": 204,
+      "params": [
+        "flags"
+      ],
+      "desc": "flags"
+    },
+    "set_combat_distance": {
+      "type": 205,
+      "params": [
+        "combat_distance"
+      ],
+      "desc": "combatDistance"
+    },
+    "dismount": {
+      "type": 206,
+      "params": [],
+      "desc": ""
+    },
+    "set_hover": {
+      "type": 207,
+      "params": [],
+      "desc": "0/1"
+    },
+    "add_immunity": {
+      "type": 208,
+      "params": [
+        "type",
+        "id",
+        "value"
+      ],
+      "desc": "type, id, value"
+    },
+    "remove_immunity": {
+      "type": 209,
+      "params": [
+        "type",
+        "id",
+        "value"
+      ],
+      "desc": "type, id, value"
+    },
+    "fall": {
+      "type": 210,
+      "params": [],
+      "desc": ""
+    },
+    "set_event_flag_reset": {
+      "type": 211,
+      "params": [],
+      "desc": "0/1"
+    },
+    "stop_motion": {
+      "type": 212,
+      "params": [
+        "stop_moving",
+        "movement_expired"
+      ],
+      "desc": "stopMoving, movementExpired"
+    },
+    "no_environment_update": {
+      "type": 213,
+      "params": [],
+      "desc": ""
+    },
+    "zone_under_attack": {
+      "type": 214,
+      "params": [],
+      "desc": ""
+    },
+    "load_grid": {
+      "type": 215,
+      "params": [],
+      "desc": ""
+    },
+    "music": {
+      "type": 216,
+      "params": [
+        "sound_id",
+        "only_self",
+        "type"
+      ],
+      "desc": "SoundId, onlySelf, type"
+    },
+    "random_music": {
+      "type": 217,
+      "params": [
+        "sound_id",
+        "sound_id_2",
+        "sound_id_3",
+        "sound_id_4",
+        "only_self",
+        "type"
+      ],
+      "desc": "SoundId1, SoundId2, SoundId3, SoundId4, onlySelf, type"
+    },
+    "custom_cast": {
+      "type": 218,
+      "params": [
+        "spell_id",
+        "castflag",
+        "bp",
+        "bp_2",
+        "bp_3"
+      ],
+      "desc": "spellId, castflag, bp0, bp1, bp2"
+    },
+    "cone_summon": {
+      "type": 219,
+      "params": [
+        "entry",
+        "duration",
+        "dist_between_rings",
+        "param4",
+        "length_of_cone",
+        "width_of_cone"
+      ],
+      "desc": "entry, duration (0 = perm), dist between rings, dist between earch summon in a row, length of cone, width of cone (angle)"
+    },
+    "player_talk": {
+      "type": 220,
+      "params": [
+        "acore_string_entry",
+        "yell"
+      ],
+      "desc": "acore_string.entry, yell? (0/1)"
+    },
+    "vortex_summon": {
+      "type": 221,
+      "params": [],
+      "desc": "entry, duration (0 = perm), spiral scaling, spiral appearance, range max, phi_delta     <-- yes confusing math, try it ingame and see, my lovely AC boys!"
+    },
+    "cu_encounter_start": {
+      "type": 222,
+      "params": [],
+      "desc": "Resets cooldowns on all targets and removes Heroism debuff(s)"
+    },
+    "do_action": {
+      "type": 223,
+      "params": [
+        "action_id"
+      ],
+      "desc": "ActionId"
+    },
+    "attack_stop": {
+      "type": 224,
+      "params": [],
+      "desc": ""
+    },
+    "set_guid": {
+      "type": 225,
+      "params": [],
+      "desc": "Sends the invoker's or the base object's own ObjectGuid to target"
+    },
+    "scripted_spawn": {
+      "type": 226,
+      "params": [
+        "state",
+        "spawn_timer_min",
+        "spawn_timer_max",
+        "respawn_delay",
+        "corpse_delay",
+        "dont_despawn"
+      ],
+      "desc": "state, spawnTimerMin, spawnTimerMax, respawnDelay, corpseDelay, dontDespawn"
+    },
+    "set_scale": {
+      "type": 227,
+      "params": [
+        "scale"
+      ],
+      "desc": "scale"
+    },
+    "summon_radial": {
+      "type": 228,
+      "params": [
+        "summon_entry",
+        "summon_duration",
+        "repetitions",
+        "start_angle",
+        "step_angle",
+        "dist"
+      ],
+      "desc": "summonEntry, summonDuration, repetitions, startAngle, stepAngle, dist"
+    },
+    "play_spell_visual": {
+      "type": 229,
+      "params": [
+        "visual_id",
+        "visual_id_impact"
+      ],
+      "desc": "visualId, visualIdImpact"
+    },
+    "follow_group": {
+      "type": 230,
+      "params": [
+        "follow_state",
+        "follow_type",
+        "dist"
+      ],
+      "desc": "followState, followType, dist"
+    },
+    "set_orientation_target": {
+      "type": 231,
+      "params": [
+        "type",
+        "target_type",
+        "target_param",
+        "target_param_2",
+        "target_param_3",
+        "target_param_4"
+      ],
+      "desc": "type, target_type, target_param1, target_param2, target_param3, target_param4"
+    },
+    "waypoint_start": {
+      "type": 232,
+      "params": [
+        "path_id",
+        "repeat",
+        "path_source"
+      ],
+      "desc": "pathId, repeat, pathSource"
+    },
+    "waypoint_data_random": {
+      "type": 233,
+      "params": [
+        "path_id",
+        "path_id_2",
+        "repeat"
+      ],
+      "desc": "pathId1, pathId2, repeat"
+    },
+    "movement_stop": {
+      "type": 234,
+      "params": [],
+      "desc": ""
+    },
+    "movement_pause": {
+      "type": 235,
+      "params": [
+        "timer"
+      ],
+      "desc": "timer"
+    },
+    "movement_resume": {
+      "type": 236,
+      "params": [
+        "timer_override"
+      ],
+      "desc": "timerOverride"
+    },
+    "world_script": {
+      "type": 237,
+      "params": [
+        "event_id",
+        "param"
+      ],
+      "desc": "eventId, param"
+    },
+    "disable_reward": {
+      "type": 238,
+      "params": [
+        "reputation",
+        "loot"
+      ],
+      "desc": "reputation 0/1, loot 0/1"
+    },
+    "set_anim_tier": {
+      "type": 239,
+      "params": [
+        "animtier"
+      ],
+      "desc": "animtier"
+    },
+    "set_gossip_menu": {
+      "type": 240,
+      "params": [
+        "gossip_menu_id"
+      ],
+      "desc": "gossipMenuId"
+    },
+    "summon_gameobject_group": {
+      "type": 241,
+      "params": [
+        "group"
+      ],
+      "desc": "group"
+    },
+    "inc_data": {
+      "type": 242,
+      "params": [],
+      "desc": "field, increment (uses aiDataSet, wipe-safe across evade)"
+    },
+    "phase": {
+      "type": 22,
+      "params": [
+        "phase"
+      ],
+      "desc": "Phase",
+      "alias_of": "set_event_phase"
+    },
+    "summon": {
+      "type": 12,
+      "params": [
+        "creature",
+        "summon_type",
+        "duration",
+        "attack_invoker",
+        "attack_owner",
+        "flags"
+      ],
+      "desc": "CreatureID, summonType, duration in ms, attackInvoker, attackScriptOwner, flags(SmartActionSummonCreatureFlags)",
+      "alias_of": "summon_creature"
+    },
+    "despawn": {
+      "type": 41,
+      "params": [
+        "delay"
+      ],
+      "desc": "timer",
+      "alias_of": "force_despawn"
+    },
+    "emote": {
+      "type": 5,
+      "params": [
+        "emote"
+      ],
+      "desc": "EmoteId",
+      "alias_of": "play_emote"
+    }
+  },
+  "targets": {
+    "none": {
+      "type": 0,
+      "params": [],
+      "desc": "NONE"
+    },
+    "self": {
+      "type": 1,
+      "params": [],
+      "desc": "Self cast"
+    },
+    "victim": {
+      "type": 2,
+      "params": [],
+      "desc": "Our current target (ie: highest aggro)"
+    },
+    "hostile_second_aggro": {
+      "type": 3,
+      "params": [
+        "max_dist",
+        "player_only",
+        "power_type",
+        "aura"
+      ],
+      "desc": "Second highest aggro, maxdist, playerOnly, powerType + 1, missing aura"
+    },
+    "hostile_last_aggro": {
+      "type": 4,
+      "params": [
+        "max_dist",
+        "player_only",
+        "power_type",
+        "aura"
+      ],
+      "desc": "Dead last on aggro, maxdist, playerOnly, powerType + 1, missing aura"
+    },
+    "hostile_random": {
+      "type": 5,
+      "params": [
+        "max_dist",
+        "player_only",
+        "power_type",
+        "aura"
+      ],
+      "desc": "Just any random target on our threat list, maxdist, playerOnly, powerType + 1, missing aura"
+    },
+    "hostile_random_not_top": {
+      "type": 6,
+      "params": [],
+      "desc": "Any random target except top threat, maxdist, playerOnly, powerType + 1, missing aura"
+    },
+    "action_invoker": {
+      "type": 7,
+      "params": [],
+      "desc": "Unit who caused this Event to occur"
+    },
+    "position": {
+      "type": 8,
+      "params": [],
+      "desc": "use xyz from event params"
+    },
+    "creature_range": {
+      "type": 9,
+      "params": [
+        "entry",
+        "min_dist",
+        "max_dist",
+        "alive"
+      ],
+      "desc": "CreatureEntry(0any), minDist, maxDist, alive(0 - both, 1 - alive, 2 - dead)"
+    },
+    "creature_guid": {
+      "type": 10,
+      "params": [
+        "guid",
+        "entry"
+      ],
+      "desc": "guid, entry"
+    },
+    "creature_distance": {
+      "type": 11,
+      "params": [
+        "entry",
+        "max_dist",
+        "alive"
+      ],
+      "desc": "CreatureEntry(0any), maxDist, alive(0 - both, 1 - alive, 2 - dead)"
+    },
+    "stored": {
+      "type": 12,
+      "params": [
+        "id"
+      ],
+      "desc": "id, uses pre-stored target(list)"
+    },
+    "gameobject_range": {
+      "type": 13,
+      "params": [
+        "entry",
+        "min_dist",
+        "max_dist"
+      ],
+      "desc": "entry(0any), min, max"
+    },
+    "gameobject_guid": {
+      "type": 14,
+      "params": [
+        "guid",
+        "entry"
+      ],
+      "desc": "guid, entry"
+    },
+    "gameobject_distance": {
+      "type": 15,
+      "params": [
+        "entry",
+        "max_dist"
+      ],
+      "desc": "entry(0any), maxDist"
+    },
+    "invoker_party": {
+      "type": 16,
+      "params": [
+        "include_pets"
+      ],
+      "desc": "includePets(0 - false, 1 - true)"
+    },
+    "player_range": {
+      "type": 17,
+      "params": [
+        "min_dist",
+        "max_dist",
+        "max_count"
+      ],
+      "desc": "min, max, maxCount (maxCount by pussywizard), set target.o to 1 if u want to search for all in range if min, max fails"
+    },
+    "player_distance": {
+      "type": 18,
+      "params": [
+        "max_dist"
+      ],
+      "desc": "maxDist"
+    },
+    "closest_creature": {
+      "type": 19,
+      "params": [
+        "entry",
+        "max_dist",
+        "dead"
+      ],
+      "desc": "CreatureEntry(0any), maxDist, dead?"
+    },
+    "closest_gameobject": {
+      "type": 20,
+      "params": [
+        "entry",
+        "max_dist"
+      ],
+      "desc": "entry(0any), maxDist"
+    },
+    "closest_player": {
+      "type": 21,
+      "params": [
+        "max_dist"
+      ],
+      "desc": "maxDist"
+    },
+    "action_invoker_vehicle": {
+      "type": 22,
+      "params": [],
+      "desc": "Unit's vehicle who caused this Event to occur"
+    },
+    "owner_or_summoner": {
+      "type": 23,
+      "params": [],
+      "desc": "Unit's owner or summoner, Use Owner/Charmer of this unit"
+    },
+    "threat_list": {
+      "type": 24,
+      "params": [],
+      "desc": "All units on creature's threat list, maxdist, playerOnly"
+    },
+    "closest_enemy": {
+      "type": 25,
+      "params": [
+        "max_dist",
+        "player_only"
+      ],
+      "desc": "maxDist, playerOnly"
+    },
+    "closest_friendly": {
+      "type": 26,
+      "params": [
+        "max_dist",
+        "player_only"
+      ],
+      "desc": "maxDist, playerOnly"
+    },
+    "loot_recipients": {
+      "type": 27,
+      "params": [],
+      "desc": "all players that have tagged this creature (for kill credit)"
+    },
+    "farthest": {
+      "type": 28,
+      "params": [
+        "max_dist",
+        "player_only",
+        "is_in_los",
+        "min_dist"
+      ],
+      "desc": "maxDist, playerOnly, isInLos, minDist"
+    },
+    "vehicle_passenger": {
+      "type": 29,
+      "params": [],
+      "desc": "seat number (vehicle can target it's own accessory)"
+    },
+    "player_with_aura": {
+      "type": 201,
+      "params": [
+        "spell_id",
+        "negation",
+        "max_dist",
+        "min_dist"
+      ],
+      "desc": "spellId, negation, MaxDist, MinDist, set target.o to a number to random resize the list"
+    },
+    "random_point": {
+      "type": 202,
+      "params": [
+        "range",
+        "amount"
+      ],
+      "desc": "range, amount (for summoning creature), self als middle (0/1) else use xyz"
+    },
+    "role_selection": {
+      "type": 203,
+      "params": [
+        "range_max",
+        "target_mask",
+        "healer_damage",
+        "resize_list"
+      ],
+      "desc": "Range Max, TargetMask (Tanks (1), Healer (2) Damage (4)), resize list"
+    },
+    "summoned_creatures": {
+      "type": 204,
+      "params": [
+        "entry"
+      ],
+      "desc": "Entry"
+    },
+    "instance_storage": {
+      "type": 205,
+      "params": [
+        "instance_data_index",
+        "type",
+        "gameobject"
+      ],
+      "desc": "Instance data index, Type (creature (1), gameobject (2))"
+    },
+    "formation": {
+      "type": 206,
+      "params": [
+        "type",
+        "creature_entry",
+        "exclude_self"
+      ],
+      "desc": "Type (0: members only, 1: leader only, 2: all), CreatureEntry (0: any), ExcludeSelf (0/1)"
+    },
+    "random": {
+      "type": 5,
+      "params": [
+        "max_dist",
+        "player_only",
+        "power_type",
+        "aura"
+      ],
+      "desc": "Just any random target on our threat list, maxdist, playerOnly, powerType + 1, missing aura",
+      "alias_of": "hostile_random"
+    },
+    "invoker": {
+      "type": 7,
+      "params": [],
+      "desc": "Unit who caused this Event to occur",
+      "alias_of": "action_invoker"
+    }
+  },
+  "event_flags": {
+    "once": 1,
+    "debug_only": 128,
+    "while_charmed": 512
+  },
+  "source_types": {
+    "creature": 0,
+    "gameobject": 1,
+    "areatrigger": 2
+  }
+}

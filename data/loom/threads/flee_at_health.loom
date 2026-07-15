@@ -1,0 +1,11 @@
+# Reusable thread: at `pct`% health (once), flee for assistance (with emote flag `emote`).
+# Used via:  include: [ { flee_at_health: { pct: 15, emote: 1 } } ]
+thread: flee_at_health
+params: [pct, emote]
+body: |
+  events:
+    - event: health_pct
+      below: {{ pct }}
+      once: true
+      do:
+        - flee_for_assist: { with_emote: {{ emote }} }

@@ -1,0 +1,25 @@
+entity: 12345
+type: creature
+name: "Example Boss"
+
+events:
+  - event: aggro
+    do:
+      - talk: 0
+      - cast: { spell: 133, at: victim }        # Fireball
+
+  - event: health_pct
+    below: 30
+    once: true
+    do:
+      - phase: enrage
+
+  - event: update_ic
+    in_phase: [enrage]
+    every: [6000, 9000]
+    do:
+      - cast: { spell: 15496, at: victim }       # Cleave
+
+  - event: reset
+    do:
+      - phase: normal                            # defines 'normal' so it isn't a dead phase

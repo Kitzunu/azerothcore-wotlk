@@ -1,0 +1,11 @@
+entity: 6
+type: creature
+name: "Kobold Vermin"
+
+events:
+- event: aggro
+  chance: 30
+  once: true
+  do:
+  - talk:
+      at: self

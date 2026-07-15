@@ -1,0 +1,55 @@
+entity: 2060
+type: creature
+name: "Councilman Smithers"
+
+events:
+- event: health_pct
+  hp_min: 70
+  hp_max: 80
+  chance: 25
+  once: true
+  do:
+  - update_template:
+      entry: 1893
+      update_level: 1
+      at: self
+  - cast:
+      spell: 24085
+      at: self
+  - phase: phase_1
+- event: update_ic
+  initial_min: 100
+  initial_max: 100
+  repeat_min: 60000
+  repeat_max: 60000
+  in_phase:
+  - phase_1
+  do:
+  - cast:
+      spell: 6507
+      cast_flags: 2
+      at: self
+- event: update_ic
+  initial_min: 800
+  initial_max: 800
+  repeat_min: 60000
+  repeat_max: 60000
+  in_phase:
+  - phase_1
+  do:
+  - cast:
+      spell: 13730
+      cast_flags: 2
+      at: victim
+- event: evade
+  in_phase:
+  - phase_1
+  do:
+  - force_despawn:
+      delay: 1500
+      at: self
+- event: evade
+  do:
+  - force_despawn:
+      delay: 1500
+      at: self

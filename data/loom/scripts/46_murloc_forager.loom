@@ -1,0 +1,7 @@
+entity: 46
+type: creature
+name: "Murloc Forager"
+
+# Whole behavior is the shared "drink a potion at low health" pattern.
+include:
+  - cast_at_health: { spell: 3368, pct: 40 }

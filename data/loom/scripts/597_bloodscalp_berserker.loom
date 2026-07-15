@@ -1,0 +1,19 @@
+entity: 597
+type: creature
+name: "Bloodscalp Berserker"
+
+# Reuse the shared flee-at-low-health thread; keep the enrage+yell event inline.
+include:
+  - flee_at_health: { pct: 15, emote: 1 }
+
+events:
+- event: health_pct
+  below: 30
+  once: true
+  do:
+  - cast:
+      spell: 8599
+      cast_flags: 1
+      at: self
+  - talk:
+      at: self

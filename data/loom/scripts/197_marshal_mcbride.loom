@@ -1,0 +1,14 @@
+entity: 197
+type: creature
+name: "Marshal McBride"
+
+events:
+- event: accepted_quest
+  quest_id: 54
+  do:
+  - cast:
+      spell: 6245
+      at: action_invoker
+  - call_timed_actionlist:
+      id: 19700
+      at: self

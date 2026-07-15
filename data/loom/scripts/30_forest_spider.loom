@@ -1,0 +1,16 @@
+entity: 30
+type: creature
+name: "Forest Spider"
+
+events:
+- event: update_ic
+  initial_min: 11000
+  initial_max: 11000
+  repeat_min: 15000
+  repeat_max: 20000
+  chance: 80
+  do:
+  - cast:
+      spell: 11918
+      cast_flags: 32
+      at: victim

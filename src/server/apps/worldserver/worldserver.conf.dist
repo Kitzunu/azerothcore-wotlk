@@ -183,6 +183,15 @@ Database.Reconnect.Attempts = 20
 DataDir = "."
 
 #
+#    LoomContentDir
+#        Description: Directory holding Loom scripting content (.loom files) and threads/.
+#                     The creature_loom table stores paths relative to this root. If empty,
+#                     defaults to "<DataDir>/loom".
+#        Default:     "" (use <DataDir>/loom)
+
+LoomContentDir = ""
+
+#
 #    LogsDir
 #        Description: Logs directory setting.
 #        Important:   LogsDir needs to be quoted, as the string might contain space characters.

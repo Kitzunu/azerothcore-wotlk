@@ -1,0 +1,42 @@
+entity: 1449
+type: creature
+name: "Witch Doctor Unbagwa"
+
+events:
+- event: reward_quest
+  quest_id: 349
+  do:
+  - call_timed_actionlist:
+      id: 144900
+      stop_after_combat: 2
+      at: self
+- event: data_set
+  field: 1
+  value: 1
+  do:
+  - add_npc_flag:
+      flags: 2
+      at: self
+  - phase: phase_1
+  - interrupt_spell:
+      param2: 12380
+      param3: 1
+      at: self
+  - play_emote:
+      emote: 4
+      at: self
+  - sound:
+      sound_id: 2859
+      at: self
+  - phase: phase_0
+- event: reward_quest
+  quest_id: 349
+  do:
+  - set_faction:
+      faction: 495
+      at: self
+- event: death
+  do:
+  - set_faction:
+      faction: 35
+      at: self

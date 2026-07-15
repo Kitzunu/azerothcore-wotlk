@@ -22,6 +22,7 @@
 #include "GameEventMgr.h"
 #include "GridDefines.h"
 #include "InstanceScript.h"
+#include "LoomLoader.h"
 #include "ObjectDefines.h"
 #include "ObjectMgr.h"
 #include "ScriptedCreature.h"
@@ -316,6 +317,9 @@ void SmartAIMgr::LoadSmartAIFromDB()
 
     LOG_INFO("server.loading", ">> Loaded {} SmartAI scripts in {} ms", count, GetMSTimeDiffToNow(oldMSTime));
     LOG_INFO("server.loading", " ");
+
+    // Loom documents override legacy SAI rows for the same (entryOrGuid, source_type).
+    LoomLoader::LoadInto(mEventMap);
 }
 
 void SmartAIMgr::CheckIfSmartAIInDatabaseExists()

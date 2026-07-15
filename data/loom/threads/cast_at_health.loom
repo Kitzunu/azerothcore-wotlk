@@ -1,0 +1,11 @@
+# Reusable thread: at `pct`% health (once), cast `spell` on self.
+# Used via:  include: [ { cast_at_health: { spell: 3368, pct: 40 } } ]
+thread: cast_at_health
+params: [spell, pct]
+body: |
+  events:
+    - event: health_pct
+      below: {{ pct }}
+      once: true
+      do:
+        - cast: { spell: {{ spell }}, at: self }

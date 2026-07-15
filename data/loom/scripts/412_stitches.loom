@@ -1,0 +1,422 @@
+entity: 412
+type: creature
+name: "Stitches"
+
+events:
+- event: update_ic
+  initial_min: 6000
+  initial_max: 12000
+  repeat_min: 6000
+  repeat_max: 12000
+  do:
+  - cast:
+      spell: 3106
+      at: victim
+- event: respawn
+  do:
+  - set_active:
+      param1: 1
+      at: self
+  - teleport:
+      at: self
+  - phase: phase_1
+- event: update_ooc
+  initial_min: 5000
+  initial_max: 5000
+  once: true
+  in_phase:
+  - phase_1
+  do:
+  - escort_start:
+      run: 2
+      path_id: 412
+      react_state: 2
+      at: self
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_faction:
+      faction: 93
+      at: self
+  - set_run:
+      at: self
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_data:
+      field: 2
+      value: 1
+      at:
+        creature_guid:
+          guid: 4185
+          entry: 468
+- event: escort_reached
+  point_id: 51
+  path_id: 412
+  do:
+  - set_data:
+      field: 2
+      value: 2
+      at:
+        creature_guid:
+          guid: 4185
+          entry: 468
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 2
+      value: 3
+      at:
+        creature_guid:
+          guid: 4185
+          entry: 468
+- event: escort_reached
+  point_id: 85
+  path_id: 412
+  do:
+  - set_data:
+      field: 2
+      value: 4
+      at:
+        creature_guid:
+          guid: 4185
+          entry: 468
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 4180
+          entry: 826
+- event: escort_reached
+  point_id: 72
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 3
+      at:
+        creature_guid:
+          guid: 4180
+          entry: 826
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 4182
+          entry: 494
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 5960
+          entry: 2470
+- event: escort_reached
+  point_id: 70
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 3
+      at:
+        creature_guid:
+          guid: 5960
+          entry: 2470
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 6133
+          entry: 1204
+- event: escort_reached
+  point_id: 68
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 6127
+          entry: 1203
+- event: escort_reached
+  point_id: 91
+  path_id: 412
+  do:
+  - escort_stop:
+      at: self
+  - random_move:
+      max_dist: 5
+      at: self
+  - phase: phase_2
+- event: death
+  do:
+  - set_data:
+      field: 2
+      value: 5
+      at:
+        creature_guid:
+          guid: 4185
+          entry: 468
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 4180
+          entry: 826
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 4182
+          entry: 494
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 5960
+          entry: 2470
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 6133
+          entry: 1204
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 6127
+          entry: 1203
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300002
+          entry: 1001
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300001
+          entry: 28987
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300003
+          entry: 1098
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300004
+          entry: 1099
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300006
+          entry: 1101
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 300005
+          entry: 1100
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 5938
+          entry: 499
+- event: death
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 5937
+          entry: 888
+- event: update_ooc
+  initial_min: 30000
+  initial_max: 40000
+  repeat_min: 90000
+  repeat_max: 120000
+  do:
+  - talk:
+      at: self
+- event: game_event_end
+  game_event_entry: 85
+  do:
+  - respawn_target:
+      force: 2
+      at: self
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 5938
+          entry: 499
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 5937
+          entry: 888
+- event: escort_reached
+  point_id: 51
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300003
+          entry: 1098
+- event: escort_reached
+  point_id: 51
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300004
+          entry: 1099
+- event: escort_reached
+  point_id: 51
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300006
+          entry: 1101
+- event: escort_reached
+  point_id: 51
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300005
+          entry: 1100
+- event: escort_reached
+  point_id: 66
+  path_id: 412
+  do:
+  - attack_start:
+      at:
+        creature_guid:
+          guid: 300003
+          entry: 1098
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300001
+          entry: 28987
+- event: escort_reached
+  point_id: 36
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 1
+      at:
+        creature_guid:
+          guid: 300002
+          entry: 1001
+- event: escort_reached
+  point_id: 85
+  path_id: 412
+  do:
+  - set_data:
+      field: 1
+      value: 2
+      at:
+        creature_guid:
+          guid: 4194
+          entry: 264

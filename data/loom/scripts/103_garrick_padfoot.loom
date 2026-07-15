@@ -1,0 +1,13 @@
+entity: 103
+type: creature
+name: "Garrick Padfoot"
+
+events:
+- event: aggro
+  once: true
+  do:
+  - cast:
+      spell: 7164
+      at: self
+  - talk:
+      at: self

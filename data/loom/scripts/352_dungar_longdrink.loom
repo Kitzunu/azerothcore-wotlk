@@ -1,0 +1,19 @@
+entity: 352
+type: creature
+name: "Dungar Longdrink"
+
+events:
+- event: aggro
+  do:
+  - summon_creature:
+      creature: 9526
+      summon_type: 4
+      duration: 30000
+      at: self
+  - summon_creature:
+      creature: 9526
+      summon_type: 4
+      duration: 30000
+      at: self
+  - talk:
+      at: self
